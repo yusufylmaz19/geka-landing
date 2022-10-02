@@ -1,0 +1,116 @@
+.app-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.app-header>h2{
+  color: black;
+} 
+a{
+  text-decoration: none;
+  color: black;
+  font-weight: 500;
+  display: flex;
+  list-style: none;
+  margin: 0 30px;
+  padding: 0 10px;
+}
+a:hover{
+  color: blueviolet;
+}
+.app-header>.desktop{
+  display: flex;
+  list-style: none;
+  font-size: 22px;
+} 
+.mobile{
+  display: flex;
+  list-style: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  font-size: 22px;
+  height: 100px;
+} 
+.mobile>li{
+  padding: 10px;
+}
+.app-header>.hamburger{
+  display: none;
+  cursor: pointer;
+  flex-direction: column;
+  width: 25px;
+} 
+.app-header>.hamburger > div{
+  background-color: black;
+  margin: 3px  0;
+  height: 2px;
+} 
+
+.about{
+  margin-top: 30px;
+}
+
+.about>.about-body>h2{ 
+  text-align: center;
+  margin: 0;
+  color: #fff;
+}
+.about>.about-body>p{ 
+  text-align: center;
+  font-size: 1.3rem;
+  color: #fff;
+  font-weight: 600;
+  word-spacing: 1.5px;
+  line-height:1.7;
+}
+
+.about>.about-body{
+  padding: 30px;
+  background-color: rgb(102, 51, 153,.5);
+  width: 60%;
+  margin: 0  auto;
+  border-radius: 10px;
+}
+.about>.tags{
+  padding: 20px;
+  margin: 10px  auto;
+  display: flex;  
+  align-items: center;
+  justify-content: space-around;
+  gap: 1rem;
+}
+.about>.tags>p{
+  font-size: 22px;
+  padding: 3px;
+  width: fit-content;
+  border-radius: 5px;
+  background-color: rgba(0, 255, 255,.3);
+}
+.about>.tags>p:nth-child(4n + 1){
+  background-color: rgba(74, 180, 64, 0.541);
+}
+.about>.tags>p:nth-child(4n + 2){
+  background-color: rgba(216, 148, 45, 0.541);
+}
+.about>.tags>p:nth-child(4n + 3){
+  background-color: rgba(235, 70, 147, 0.541);
+}
+
+
+@media only screen and  (max-width:540px) {
+  .app-header>.desktop{
+    display: none;
+  }
+  .app-header>.hamburger{
+    display: flex;
+  }
+}
+@media only screen and  (max-width:700px) {
+  .about>.tags{
+    flex-wrap: wrap;
+  }
+}
