@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/geka-landing/static/css/main.5f07e2b3.css",
+    "main.js": "/geka-landing/static/js/main.684aff83.js",
+    "index.html": "/geka-landing/index.html",
+    "main.5f07e2b3.css.map": "/geka-landing/static/css/main.5f07e2b3.css.map",
+    "main.684aff83.js.map": "/geka-landing/static/js/main.684aff83.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5f07e2b3.css",
+    "static/js/main.684aff83.js"
+  ]
+}
