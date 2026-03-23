@@ -387,6 +387,9 @@
       btn.classList.add('active');
       var filter = btn.getAttribute('data-filter');
 
+      // Track tag filter
+      if (typeof trackEvent === 'function') trackEvent('gallery_filter_click', { filter_type: filter });
+
       galleryItems.forEach(function (item, i) {
         if (!item.parentNode) return;
         var show = (filter === 'all' || item.getAttribute('data-type') === filter);
@@ -438,6 +441,11 @@
     showLightboxItem();
     lightbox.classList.add('active');
     document.body.style.overflow = 'hidden';
+
+    if (typeof trackEvent === 'function') {
+      var item = currentItems[index];
+      if (item) trackEvent('lightbox_open', { item_type: item.getAttribute('data-type') });
+    }
   }
 
   function closeLightbox() {
