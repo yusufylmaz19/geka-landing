@@ -326,6 +326,56 @@
   }
 
   /* ──────────────────────────────────────
+     Dynamic Gallery Initialization
+     ────────────────────────────────────── */
+  var galleryGrid = document.getElementById('galleryGrid');
+  if (galleryGrid) {
+    function createGalleryItem(type, index) {
+      var item = document.createElement('div');
+      item.className = 'gallery-item reveal-scale';
+      item.setAttribute('data-type', type);
+      item.style.display = 'none';
+
+      var overlay = document.createElement('div');
+      overlay.className = 'overlay';
+      overlay.innerHTML = '<span>' + (type === 'image' ? 'Görüntüle' : 'Oynat') + '</span>';
+
+      if (type === 'image') {
+        var img = document.createElement('img');
+        img.onload = function() {
+          item.style.display = '';
+          revealObserver.observe(item);
+        };
+        img.onerror = function() { item.remove(); };
+        img.src = 'galeri/images/' + index + '.jpeg';
+        item.appendChild(img);
+      } else {
+        var vid = document.createElement('video');
+        vid.muted = true;
+        vid.loop = true;
+        vid.onloadedmetadata = function() {
+          item.style.display = '';
+          revealObserver.observe(item);
+        };
+        vid.onerror = function() { item.remove(); };
+        vid.src = 'galeri/videos/' + index + '.mp4';
+        item.appendChild(vid);
+
+        var indicator = document.createElement('div');
+        indicator.className = 'video-indicator';
+        indicator.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>';
+        item.appendChild(indicator);
+      }
+      
+      item.appendChild(overlay);
+      return item;
+    }
+
+    for (var j = 1; j <= 20; j++) galleryGrid.appendChild(createGalleryItem('video', j));
+    for (var i = 1; i <= 150; i++) galleryGrid.appendChild(createGalleryItem('image', i));
+  }
+
+  /* ──────────────────────────────────────
      Gallery Filters
      ────────────────────────────────────── */
   var filterBtns = document.querySelectorAll('.filter-btn');
@@ -338,6 +388,7 @@
       var filter = btn.getAttribute('data-filter');
 
       galleryItems.forEach(function (item, i) {
+        if (!item.parentNode) return;
         var show = (filter === 'all' || item.getAttribute('data-type') === filter);
         if (show) {
           item.style.display = '';
@@ -377,7 +428,7 @@
 
   function getVisibleItems() {
     return Array.from(galleryItems).filter(function (item) {
-      return item.style.display !== 'none';
+      return item.style.display !== 'none' && item.parentNode !== null;
     });
   }
 
@@ -440,6 +491,7 @@
 
   galleryItems.forEach(function (item) {
     item.addEventListener('click', function () {
+      if (!item.parentNode) return;
       var visibleItems = getVisibleItems();
       var idx = visibleItems.indexOf(item);
       openLightbox(idx);
