@@ -157,6 +157,7 @@ body.cursor-hover .cursor-trail {
 /* ---------- Grain Overlay ---------- */
 .grain-overlay {
   position: relative;
+  overflow-x: hidden;
 }
 
 .grain-overlay::after {
@@ -672,6 +673,7 @@ body.cursor-hover .cursor-trail {
 #galeri {
   padding: var(--section-pad);
   background: var(--black);
+  overflow-x: hidden;
 }
 
 /* Filter buttons */
