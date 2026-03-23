@@ -842,6 +842,7 @@ body.cursor-hover .cursor-trail {
   font-size: 1.5rem;
   transition: all .3s;
   cursor: pointer;
+  z-index: 2010; /* MUST BE ABOVE IMAGE */
 }
 
 .lightbox-close:hover,
