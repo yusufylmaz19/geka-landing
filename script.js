@@ -409,9 +409,10 @@
       var vid = item.querySelector('video');
       var newVid = document.createElement('video');
       newVid.src = vid.src;
-      newVid.controls = true;
       newVid.autoplay = true;
-      newVid.muted = false; // unmute in lightbox for user control
+      newVid.muted = true;
+      newVid.loop = true;
+      newVid.controls = false; // no controls so user cannot unmute
       newVid.style.maxWidth = '90vw';
       newVid.style.maxHeight = '85vh';
       newVid.style.borderRadius = '6px';
