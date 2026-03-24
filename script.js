@@ -537,6 +537,44 @@
   });
 
   /* ──────────────────────────────────────
+     Cookie Consent
+     ────────────────────────────────────── */
+  const cookieConsent = document.getElementById('cookieConsent');
+  const ccAccept = document.getElementById('ccAccept');
+  const ccDecline = document.getElementById('ccDecline');
+
+  if (cookieConsent && ccAccept && ccDecline) {
+    const consent = localStorage.getItem('ga_consent');
+    
+    if (!consent) {
+      setTimeout(function() {
+        cookieConsent.classList.add('show');
+      }, 2000);
+    }
+
+    ccAccept.addEventListener('click', function() {
+      localStorage.setItem('ga_consent', 'granted');
+      cookieConsent.classList.remove('show');
+      
+      // Load GA dynamically
+      if (typeof window.dataLayer === 'undefined' || (window.dataLayer && window.dataLayer.length === 0)) {
+        let script = document.createElement('script');
+        script.async = true;
+        script.src = "https://www.googletagmanager.com/gtag/js?id=G-ZVEB9FZZJP";
+        document.head.appendChild(script);
+
+        gtag('js', new Date());
+        gtag('config', 'G-ZVEB9FZZJP');
+      }
+    });
+
+    ccDecline.addEventListener('click', function() {
+      localStorage.setItem('ga_consent', 'denied');
+      cookieConsent.classList.remove('show');
+    });
+  }
+
+  /* ──────────────────────────────────────
      Init
      ────────────────────────────────────── */
   onScroll();

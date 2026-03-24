@@ -30,18 +30,26 @@
     content="Çelik çatı, asma tavan, alçı bölme ve daha fazlası — profesyonel yapı çözümleri.">
   <meta name="twitter:image" content="https://www.gekayapi.com/og-image.jpeg">
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZVEB9FZZJP"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-ZVEB9FZZJP');
 
     // Custom Event Tracking Helper
     function trackEvent(eventName, eventParams) {
-      if (typeof gtag === 'function') {
+      if (typeof window.gtag === 'function' && localStorage.getItem('ga_consent') === 'granted') {
         gtag('event', eventName, eventParams);
       }
+    }
+
+    // Load Google Analytics dynamically if consent is granted
+    if (localStorage.getItem('ga_consent') === 'granted') {
+      let script = document.createElement('script');
+      script.async = true;
+      script.src = "https://www.googletagmanager.com/gtag/js?id=G-ZVEB9FZZJP";
+      document.head.appendChild(script);
+
+      gtag('js', new Date());
+      gtag('config', 'G-ZVEB9FZZJP');
     }
   </script>
 
@@ -372,6 +380,30 @@
     <button class="lightbox-next" id="lbNext" aria-label="Sonraki">&#8250;</button>
     <div class="lightbox-content" id="lbContent"></div>
     <div class="lightbox-counter" id="lbCounter"></div>
+  </div>
+
+  <!-- ============ COOKIE CONSENT ============ -->
+  <div class="cookie-consent" id="cookieConsent" role="dialog" aria-label="Çerez İzni">
+    <div class="cc-content">
+      <div class="cc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5" />
+          <path d="M8.5 8.5v.01" />
+          <path d="M16 15.5v.01" />
+          <path d="M12 12v.01" />
+          <path d="M11 17v.01" />
+          <path d="M7 14v.01" />
+        </svg>
+      </div>
+      <div class="cc-text">
+        <h4>Çerez Tercihleri</h4>
+        <p>Size daha iyi bir deneyim sunabilmek için sitemizde Google Analytics kullanıyoruz. Ziyaretçi verilerinizi anonim olarak analiz etmemize izin veriyor musunuz?</p>
+      </div>
+    </div>
+    <div class="cc-buttons">
+      <button class="btn-decline" id="ccDecline">Reddet</button>
+      <button class="btn btn-primary" id="ccAccept">Kabul Et</button>
+    </div>
   </div>
 
   <!-- Script -->
