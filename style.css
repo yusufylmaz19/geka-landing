@@ -358,16 +358,17 @@ body.cursor-hover .cursor-trail {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: var(--black);
+  background: transparent;
 }
 
 /* Blueprint canvas background */
 #blueprint-canvas {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .hero-content {
@@ -534,7 +535,7 @@ body.cursor-hover .cursor-trail {
    ======================================== */
 #hizmetler {
   padding: var(--section-pad);
-  background: var(--black-light);
+  background: transparent;
 }
 
 .services-grid {
@@ -599,7 +600,7 @@ body.cursor-hover .cursor-trail {
    ======================================== */
 #hakkimizda {
   padding: var(--section-pad);
-  background: var(--gray-dark);
+  background: transparent;
   position: relative;
   box-shadow:
     0 -40px 80px rgba(0, 0, 0, .5),
@@ -672,7 +673,7 @@ body.cursor-hover .cursor-trail {
    ======================================== */
 #galeri {
   padding: var(--section-pad);
-  background: var(--black);
+  background: transparent;
   overflow-x: hidden;
 }
 
@@ -909,7 +910,7 @@ body.cursor-hover .cursor-trail {
    ======================================== */
 #iletisim {
   padding: var(--section-pad);
-  background: var(--black-light);
+  background: transparent;
   box-shadow: 0 -40px 80px rgba(0, 0, 0, .5);
 }
 

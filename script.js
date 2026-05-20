@@ -81,10 +81,23 @@
     const ctx = canvas.getContext('2d');
     let w, h;
     let time = 0;
+    let sketches = [];
 
     function resize() {
-      w = canvas.width = canvas.offsetWidth;
-      h = canvas.height = canvas.offsetHeight;
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+      
+      if (sketches.length === 0) {
+        for(let i=0; i<8; i++) {
+          sketches.push({
+            x: Math.random() * 4000,
+            y: Math.random() * 4000,
+            scale: 0.6 + Math.random() * 1.4,
+            type: Math.floor(Math.random() * 4),
+            rotation: Math.random() * 0.2 - 0.1
+          });
+        }
+      }
     }
 
     function drawGrid() {
@@ -156,6 +169,79 @@
       grad.addColorStop(1, 'rgba(0,245,255,0)');
       ctx.fillStyle = grad;
       ctx.fillRect(0, scanY - 30, w, 60);
+
+      // --- Architectural Sketches ---
+      ctx.strokeStyle = 'rgba(0, 245, 255, ' + (0.04 + pulse * 0.02) + ')';
+      ctx.lineWidth = 1;
+      
+      sketches.forEach(s => {
+        ctx.save();
+        let currentY = (s.y + time * 0.08) % (h + 600) - 300;
+        let currentX = s.x % (w + 600) - 300;
+        
+        ctx.translate(currentX, currentY);
+        ctx.rotate(s.rotation);
+        ctx.scale(s.scale, s.scale);
+        ctx.beginPath();
+        
+        if (s.type === 0) {
+          // House frame
+          ctx.moveTo(-50, 0); ctx.lineTo(50, 0); 
+          ctx.moveTo(-50, 0); ctx.lineTo(-50, -60); 
+          ctx.moveTo(50, 0); ctx.lineTo(50, -60); 
+          ctx.moveTo(-50, -60); ctx.lineTo(0, -100); ctx.lineTo(50, -60); 
+          ctx.moveTo(-60, -60); ctx.lineTo(60, -60); 
+          ctx.rect(-20, -40, 15, 20); 
+          ctx.moveTo(-20, -30); ctx.lineTo(-5, -30);
+          ctx.moveTo(-12.5, -40); ctx.lineTo(-12.5, -20);
+        } else if (s.type === 1) {
+          // Roof Truss
+          ctx.moveTo(-80, 0); ctx.lineTo(80, 0);
+          ctx.moveTo(-80, 0); ctx.lineTo(0, -60); ctx.lineTo(80, 0);
+          ctx.moveTo(-40, 0); ctx.lineTo(0, -60);
+          ctx.moveTo(40, 0); ctx.lineTo(0, -60);
+          ctx.moveTo(-40, 0); ctx.lineTo(-40, -30);
+          ctx.moveTo(40, 0); ctx.lineTo(40, -30);
+        } else if (s.type === 2) {
+          // I-Beam Isometric
+          ctx.moveTo(-20, -30); ctx.lineTo(20, -30); 
+          ctx.moveTo(-20, -26); ctx.lineTo(-2, -26);
+          ctx.lineTo(-2, 26); ctx.lineTo(-20, 26);
+          ctx.moveTo(20, -26); ctx.lineTo(2, -26);
+          ctx.lineTo(2, 26); ctx.lineTo(20, 26);
+          ctx.moveTo(-20, 30); ctx.lineTo(20, 30); 
+          ctx.moveTo(-20, -30); ctx.lineTo(-20, -26);
+          ctx.moveTo(20, -30); ctx.lineTo(20, -26);
+          ctx.moveTo(-20, 30); ctx.lineTo(-20, 26);
+          ctx.moveTo(20, 30); ctx.lineTo(20, 26);
+        } else if (s.type === 3) {
+          // Protractor / Arch blueprint
+          ctx.arc(0, 0, 50, Math.PI, Math.PI * 2);
+          ctx.arc(0, 0, 45, Math.PI, Math.PI * 2);
+          for(let a=Math.PI; a<=Math.PI*2; a+=Math.PI/12) {
+             ctx.moveTo(Math.cos(a)*45, Math.sin(a)*45);
+             ctx.lineTo(Math.cos(a)*50, Math.sin(a)*50);
+          }
+          ctx.moveTo(-60, 0); ctx.lineTo(60, 0);
+        }
+        
+        ctx.stroke();
+        
+        // Annotations
+        if (s.type === 0 || s.type === 1) {
+           ctx.strokeStyle = 'rgba(0, 245, 255, ' + (0.02 + pulse * 0.01) + ')';
+           ctx.beginPath();
+           ctx.moveTo(-80, 20); ctx.lineTo(80, 20);
+           ctx.moveTo(-80, 15); ctx.lineTo(-80, 25);
+           ctx.moveTo(80, 15); ctx.lineTo(80, 25);
+           ctx.stroke();
+           ctx.fillStyle = 'rgba(0, 245, 255, ' + (0.03 + pulse * 0.02) + ')';
+           ctx.font = "8px monospace";
+           ctx.fillText("4500 mm", -15, 32);
+        }
+        
+        ctx.restore();
+      });
 
       time++;
       requestAnimationFrame(drawGrid);
