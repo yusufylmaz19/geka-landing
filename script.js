@@ -124,7 +124,7 @@
       }
 
       // Minor subdivisions
-      ctx.strokeStyle = 'rgba(0, 245, 255, 0.015)';
+      ctx.strokeStyle = 'rgba(220, 235, 255, 0.015)';
       ctx.lineWidth = 0.3;
       var minor = spacing / 4;
       for (let y = (offset % minor); y < h; y += minor) {
@@ -141,7 +141,7 @@
       }
 
       // Diagonal accent lines
-      ctx.strokeStyle = 'rgba(0, 245, 255, ' + (0.02 + pulse * 0.015) + ')';
+      ctx.strokeStyle = 'rgba(220, 235, 255, ' + (0.02 + pulse * 0.015) + ')';
       ctx.lineWidth = 0.6;
       for (let i = -h; i < w + h; i += spacing * 3) {
         ctx.beginPath();
@@ -152,7 +152,7 @@
 
       // Glowing intersection nodes
       var nodeAlpha = 0.06 + pulse * 0.06;
-      ctx.fillStyle = 'rgba(0, 245, 255, ' + nodeAlpha + ')';
+      ctx.fillStyle = 'rgba(220, 235, 255, ' + nodeAlpha + ')';
       for (let x = (offset % (spacing * 2)); x < w; x += spacing * 2) {
         for (let y = (offset % (spacing * 2)); y < h; y += spacing * 2) {
           ctx.beginPath();
@@ -164,14 +164,14 @@
       // Scanline effect
       var scanY = (time * 0.4) % h;
       var grad = ctx.createLinearGradient(0, scanY - 30, 0, scanY + 30);
-      grad.addColorStop(0, 'rgba(0,245,255,0)');
-      grad.addColorStop(0.5, 'rgba(0,245,255,0.03)');
-      grad.addColorStop(1, 'rgba(0,245,255,0)');
+      grad.addColorStop(0, 'rgba(220, 235, 255,0)');
+      grad.addColorStop(0.5, 'rgba(220, 235, 255,0.03)');
+      grad.addColorStop(1, 'rgba(220, 235, 255,0)');
       ctx.fillStyle = grad;
       ctx.fillRect(0, scanY - 30, w, 60);
 
       // --- Architectural Sketches ---
-      ctx.strokeStyle = 'rgba(0, 245, 255, ' + (0.04 + pulse * 0.02) + ')';
+      ctx.strokeStyle = 'rgba(220, 235, 255, ' + (0.04 + pulse * 0.02) + ')';
       ctx.lineWidth = 1;
       
       sketches.forEach(s => {
@@ -229,13 +229,13 @@
         
         // Annotations
         if (s.type === 0 || s.type === 1) {
-           ctx.strokeStyle = 'rgba(0, 245, 255, ' + (0.02 + pulse * 0.01) + ')';
+           ctx.strokeStyle = 'rgba(220, 235, 255, ' + (0.02 + pulse * 0.01) + ')';
            ctx.beginPath();
            ctx.moveTo(-80, 20); ctx.lineTo(80, 20);
            ctx.moveTo(-80, 15); ctx.lineTo(-80, 25);
            ctx.moveTo(80, 15); ctx.lineTo(80, 25);
            ctx.stroke();
-           ctx.fillStyle = 'rgba(0, 245, 255, ' + (0.03 + pulse * 0.02) + ')';
+           ctx.fillStyle = 'rgba(220, 235, 255, ' + (0.03 + pulse * 0.02) + ')';
            ctx.font = "8px monospace";
            ctx.fillText("4500 mm", -15, 32);
         }
@@ -444,8 +444,8 @@
   var galleryItems = document.querySelectorAll('.gallery-item'); // Initialize
 
   if (galleryGrid) {
-    for (var j = 1; j <= 20; j++) galleryData.push({ type: 'video', index: j });
-    for (var i = 1; i <= 150; i++) galleryData.push({ type: 'image', index: i });
+    for (var j = 1; j <= 8; j++) galleryData.push({ type: 'video', index: j });
+    for (var i = 1; i <= 95; i++) galleryData.push({ type: 'image', index: i });
     
     // Shuffle the array for a diverse layout
     function shuffle(array) {
@@ -562,24 +562,24 @@
     }, { rootMargin: '0px 0px 600px 0px' });
     
     infiniteScrollObserver.observe(loadMoreContainer);
-  }
 
-  /* ──────────────────────────────────────
-     Gallery Filters
-     ────────────────────────────────────── */
-  var filterBtns = document.querySelectorAll('.filter-btn');
+    /* ──────────────────────────────────────
+       Gallery Filters
+       ────────────────────────────────────── */
+    var filterBtns = document.querySelectorAll('.filter-btn');
 
-  filterBtns.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      filterBtns.forEach(function (b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      var filter = btn.getAttribute('data-filter');
+    filterBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        filterBtns.forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var filter = btn.getAttribute('data-filter');
 
-      if (typeof trackEvent === 'function') trackEvent('gallery_filter_click', { filter_type: filter });
+        if (typeof trackEvent === 'function') trackEvent('gallery_filter_click', { filter_type: filter });
 
-      applyFilter(filter);
+        applyFilter(filter);
+      });
     });
-  });
+  }
 
   /* ──────────────────────────────────────
      Lightbox
@@ -770,7 +770,7 @@
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
           title.style.transition = 'text-shadow 1s';
-          title.style.textShadow = '0 0 60px rgba(0,245,255,.2), 0 0 120px rgba(0,245,255,.08)';
+          title.style.textShadow = '0 0 60px rgba(220, 235, 255,.2), 0 0 120px rgba(220, 235, 255,.08)';
         }
       });
     }, { threshold: 0.5 });
