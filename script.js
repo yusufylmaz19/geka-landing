@@ -7,6 +7,24 @@
 (function () {
   'use strict';
 
+  // Global flag to prevent infinite scroll firing during smooth scroll
+  window.isAutoScrolling = false;
+  var autoScrollTimeout = null;
+  document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+    anchor.addEventListener('click', function() {
+      var targetId = this.getAttribute('href');
+      if (targetId === '#') return;
+      var targetEl = document.querySelector(targetId);
+      if (targetEl) {
+        window.isAutoScrolling = true;
+        clearTimeout(autoScrollTimeout);
+        autoScrollTimeout = setTimeout(function() {
+          window.isAutoScrolling = false;
+        }, 1500); // Wait 1.5s for smooth scroll to finish
+      }
+    });
+  });
+
   /* ──────────────────────────────────────
      Cursor Trail Animation
      ────────────────────────────────────── */
@@ -326,15 +344,39 @@
   }
 
   /* ──────────────────────────────────────
-     Dynamic Gallery Initialization
+     Dynamic Gallery Initialization & Load More
      ────────────────────────────────────── */
   var galleryGrid = document.getElementById('galleryGrid');
+  var loadMoreContainer = document.getElementById('galleryLoadMoreContainer');
+  var galleryCount = document.getElementById('galleryCount');
+  
+  var galleryData = [];
+  var currentFilter = 'all';
+  var itemsPerPage = 12;
+  var currentPage = 0;
+  var filteredData = [];
+  var galleryItems = document.querySelectorAll('.gallery-item'); // Initialize
+
   if (galleryGrid) {
-    function createGalleryItem(type, index) {
+    for (var j = 1; j <= 20; j++) galleryData.push({ type: 'video', index: j });
+    for (var i = 1; i <= 150; i++) galleryData.push({ type: 'image', index: i });
+    
+    // Shuffle the array for a diverse layout
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+    shuffle(galleryData);
+
+    function createGalleryItem(data) {
+      var type = data.type;
+      var index = data.index;
+
       var item = document.createElement('div');
       item.className = 'gallery-item reveal-scale';
       item.setAttribute('data-type', type);
-      item.style.display = 'none';
 
       var overlay = document.createElement('div');
       overlay.className = 'overlay';
@@ -342,10 +384,7 @@
 
       if (type === 'image') {
         var img = document.createElement('img');
-        img.onload = function() {
-          item.style.display = '';
-          revealObserver.observe(item);
-        };
+        img.loading = 'lazy';
         img.onerror = function() { item.remove(); };
         img.src = 'galeri/images/' + index + '.jpeg';
         item.appendChild(img);
@@ -353,13 +392,25 @@
         var vid = document.createElement('video');
         vid.muted = true;
         vid.loop = true;
-        vid.onloadedmetadata = function() {
-          item.style.display = '';
-          revealObserver.observe(item);
-        };
+        vid.preload = 'none';
         vid.onerror = function() { item.remove(); };
         vid.src = 'galeri/videos/' + index + '.mp4';
         item.appendChild(vid);
+
+        var vidObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              vid.load();
+              // Try to play if possible
+              var playPromise = vid.play();
+              if (playPromise !== undefined) {
+                playPromise.catch(() => {});
+              }
+              vidObserver.unobserve(vid);
+            }
+          });
+        });
+        vidObserver.observe(vid);
 
         var indicator = document.createElement('div');
         indicator.className = 'video-indicator';
@@ -368,18 +419,69 @@
       }
       
       item.appendChild(overlay);
+      revealObserver.observe(item);
       return item;
     }
 
-    for (var j = 1; j <= 20; j++) galleryGrid.appendChild(createGalleryItem('video', j));
-    for (var i = 1; i <= 150; i++) galleryGrid.appendChild(createGalleryItem('image', i));
+    function renderGallery() {
+      var start = currentPage * itemsPerPage;
+      var end = start + itemsPerPage;
+      var itemsToRender = filteredData.slice(start, end);
+      
+      itemsToRender.forEach(function(data) {
+        galleryGrid.appendChild(createGalleryItem(data));
+      });
+
+      if (end >= filteredData.length) {
+        loadMoreContainer.style.display = 'none';
+        end = filteredData.length;
+      } else {
+        loadMoreContainer.style.display = 'block';
+      }
+      
+      if (galleryCount) {
+        galleryCount.textContent = end + ' / ' + filteredData.length + ' görsel gösteriliyor';
+      }
+      
+      galleryItems = document.querySelectorAll('.gallery-item');
+      
+      // Update lightbox items
+      currentItems = getVisibleItems();
+    }
+
+    function applyFilter(filter) {
+      currentFilter = filter;
+      if (filter === 'all') {
+        filteredData = galleryData;
+      } else {
+        filteredData = galleryData.filter(item => item.type === filter);
+      }
+      galleryGrid.innerHTML = '';
+      currentPage = 0;
+      renderGallery();
+    }
+
+    filteredData = galleryData;
+    renderGallery();
+
+    // Infinite scroll observer to auto-load more items when near the bottom
+    var infiniteScrollObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting && loadMoreContainer.style.display !== 'none') {
+          if (window.isAutoScrolling) return; // Prevent loading during smooth scroll to anchor
+          currentPage++;
+          renderGallery();
+        }
+      });
+    }, { rootMargin: '0px 0px 600px 0px' });
+    
+    infiniteScrollObserver.observe(loadMoreContainer);
   }
 
   /* ──────────────────────────────────────
      Gallery Filters
      ────────────────────────────────────── */
   var filterBtns = document.querySelectorAll('.filter-btn');
-  var galleryItems = document.querySelectorAll('.gallery-item');
 
   filterBtns.forEach(function (btn) {
     btn.addEventListener('click', function () {
@@ -387,33 +489,10 @@
       btn.classList.add('active');
       var filter = btn.getAttribute('data-filter');
 
-      // Track tag filter
       if (typeof trackEvent === 'function') trackEvent('gallery_filter_click', { filter_type: filter });
 
-      galleryItems.forEach(function (item, i) {
-        if (!item.parentNode) return;
-        var show = (filter === 'all' || item.getAttribute('data-type') === filter);
-        if (show) {
-          item.style.display = '';
-          item.style.opacity = '0';
-          item.style.transform = 'scale(.92)';
-          setTimeout(function () {
-            item.style.transition = 'opacity .4s, transform .4s';
-            item.style.opacity = '1';
-            item.style.transform = 'scale(1)';
-          }, i * 40);
-        } else {
-          item.style.display = 'none';
-        }
-      });
+      applyFilter(filter);
     });
-  });
-
-  /* ──────────────────────────────────────
-     Mute all gallery videos
-     ────────────────────────────────────── */
-  document.querySelectorAll('.gallery-item video').forEach(function (vid) {
-    vid.muted = true;
   });
 
   /* ──────────────────────────────────────
@@ -497,14 +576,17 @@
     showLightboxItem();
   }
 
-  galleryItems.forEach(function (item) {
-    item.addEventListener('click', function () {
-      if (!item.parentNode) return;
+  if (galleryGrid) {
+    galleryGrid.addEventListener('click', function (e) {
+      var item = e.target.closest('.gallery-item');
+      if (!item) return;
       var visibleItems = getVisibleItems();
       var idx = visibleItems.indexOf(item);
-      openLightbox(idx);
+      if (idx > -1) {
+        openLightbox(idx);
+      }
     });
-  });
+  }
 
   lbClose.addEventListener('click', closeLightbox);
   lbPrev.addEventListener('click', prevItem);
@@ -519,6 +601,79 @@
     if (e.key === 'Escape')      closeLightbox();
     if (e.key === 'ArrowLeft')   prevItem();
     if (e.key === 'ArrowRight')  nextItem();
+  });
+
+  // Mouse wheel navigation for lightbox with throttle
+  var wheelTimeout = null;
+  lightbox.addEventListener('wheel', function(e) {
+    if (!lightbox.classList.contains('active')) return;
+    e.preventDefault(); // prevent page scroll
+    
+    if (wheelTimeout) return; // ignore events if we just scrolled
+    
+    if (e.deltaY > 0) {
+      nextItem();
+    } else if (e.deltaY < 0) {
+      prevItem();
+    }
+    
+    // Lock scrolling for 400ms to prevent skipping multiple items
+    wheelTimeout = setTimeout(function() {
+      wheelTimeout = null;
+    }, 400);
+  }, { passive: false });
+
+  // Swipe & Grab Navigation for Lightbox
+  var startX = 0;
+  var endX = 0;
+  var isDragging = false;
+
+  function handleSwipe() {
+    var threshold = 50; // Minimum swipe distance
+    var distance = endX - startX;
+    if (Math.abs(distance) > threshold) {
+      if (distance < 0) {
+        nextItem(); // Swipe left -> Next
+      } else {
+        prevItem(); // Swipe right -> Prev
+      }
+    }
+  }
+
+  // Touch Events (Mobile)
+  lightbox.addEventListener('touchstart', function(e) {
+    if (!lightbox.classList.contains('active')) return;
+    startX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  lightbox.addEventListener('touchend', function(e) {
+    if (!lightbox.classList.contains('active')) return;
+    endX = e.changedTouches[0].screenX;
+    handleSwipe();
+  }, { passive: true });
+
+  // Mouse Events (Desktop Drag)
+  lightbox.addEventListener('mousedown', function(e) {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.target.closest('button')) return; // Don't trigger if clicking navigation buttons
+    isDragging = true;
+    startX = e.clientX;
+    lightbox.style.cursor = 'grabbing';
+  });
+
+  lightbox.addEventListener('mouseup', function(e) {
+    if (!isDragging || !lightbox.classList.contains('active')) return;
+    isDragging = false;
+    endX = e.clientX;
+    lightbox.style.cursor = '';
+    handleSwipe();
+  });
+
+  lightbox.addEventListener('mouseleave', function() {
+    if (isDragging) {
+      isDragging = false;
+      lightbox.style.cursor = '';
+    }
   });
 
   /* ──────────────────────────────────────

@@ -708,22 +708,34 @@ body.cursor-hover .cursor-trail {
 /* Gallery grid */
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-auto-rows: 200px;
+  grid-auto-flow: dense;
+  gap: 16px;
 }
 
 .gallery-item {
   position: relative;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
-  aspect-ratio: 4/3;
   box-shadow: 0 4px 20px rgba(0, 0, 0, .4);
-  transition: box-shadow .4s;
+  transition: box-shadow .4s, transform .4s;
+}
+
+/* Make some items larger for a masonry-like effect */
+.gallery-item:nth-child(5n + 1) {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.gallery-item:nth-child(7n + 3) {
+  grid-row: span 2;
 }
 
 .gallery-item:hover {
   box-shadow: 0 8px 40px rgba(0, 245, 255, .12), 0 0 0 1px rgba(0, 245, 255, .15);
+  transform: translateY(-4px);
 }
 
 .gallery-item img,
@@ -731,42 +743,49 @@ body.cursor-hover .cursor-trail {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform .6s var(--ease), filter .5s;
+  transition: transform .7s cubic-bezier(0.4, 0, 0.2, 1), filter .5s;
 }
 
 .gallery-item .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 245, 255, .1);
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,245,255,0.2) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity .35s;
-  backdrop-filter: blur(2px);
+  transition: opacity .4s;
+  backdrop-filter: blur(3px);
 }
 
 .gallery-item .overlay span {
   font-family: var(--font-heading2);
   font-weight: 700;
-  font-size: .9rem;
-  letter-spacing: 2px;
+  font-size: 1rem;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
   color: var(--white);
-  border: 1px solid rgba(255, 255, 255, .4);
-  padding: 10px 24px;
-  border-radius: 4px;
-  text-shadow: 0 0 8px rgba(0, 245, 255, .4);
+  border: 1px solid rgba(0, 245, 255, .5);
+  background: rgba(0,0,0,0.4);
+  padding: 12px 28px;
+  border-radius: 6px;
+  text-shadow: 0 0 8px rgba(0, 245, 255, .6);
+  transform: translateY(20px);
+  transition: transform .4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .gallery-item:hover img,
 .gallery-item:hover video {
-  transform: scale(1.1);
-  filter: brightness(.5);
+  transform: scale(1.08);
+  filter: brightness(.6) contrast(1.1);
 }
 
 .gallery-item:hover .overlay {
   opacity: 1;
+}
+
+.gallery-item:hover .overlay span {
+  transform: translateY(0);
 }
 
 /* Video indicator */
