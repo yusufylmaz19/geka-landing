@@ -1123,3 +1123,144 @@ dialog::backdrop {
     flex-wrap: wrap;
   }
 }
+/* Keep the construction sequence in view until its scroll track is complete. */
+.hero-scroll {
+  height: 200svh;
+  min-height: 1250px;
+}
+.hero-layout {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 620px;
+  align-items: center;
+}
+.hero-copy {
+  padding: 35px 0;
+}
+.model-track {
+  position: absolute;
+  inset: 0 -30px 0 auto;
+  width: 57%;
+}
+.model-dock {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+.model-stage {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+}
+.model-stage canvas {
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+.model-stage.ready canvas {
+  opacity: 1;
+}
+.model-fallback {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.model-stage.failed .model-fallback {
+  visibility: visible;
+  opacity: 0.65;
+}
+.model-stage.failed canvas {
+  display: none;
+}
+.hero.scene-failed .hero-scroll {
+  height: auto;
+  min-height: 0;
+}
+.hero.scene-failed .hero-layout {
+  position: relative;
+  height: 650px;
+  min-height: 0;
+}
+.model-label {
+  bottom: 30px;
+}
+.motion-toggle {
+  top: 25px;
+}
+@media (max-width: 700px) {
+  .hero-scroll {
+    height: auto;
+    min-height: 0;
+  }
+  .hero-layout {
+    position: relative;
+    display: block;
+    height: auto;
+    min-height: 0;
+  }
+  .hero-copy {
+    padding: 35px 0 20px;
+  }
+  .model-track {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: 160svh;
+    min-height: 850px;
+  }
+  .model-dock {
+    position: sticky;
+    top: 12px;
+    height: 70svh;
+    min-height: 340px;
+    max-height: 600px;
+  }
+  .model-stage {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .model-label {
+    font-size: 8px;
+    bottom: 14px;
+  }
+  .motion-toggle {
+    top: 10px;
+  }
+  .hero.scene-failed .hero-layout {
+    height: auto;
+  }
+  .hero.scene-failed .model-track {
+    height: 420px;
+    min-height: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll {
+    height: auto;
+    min-height: 0;
+  }
+  .hero-layout {
+    position: relative;
+    height: 650px;
+    min-height: 0;
+  }
+  .model-stage canvas,
+  .model-fallback {
+    transition: none;
+  }
+}
+@media (max-width: 700px) and (prefers-reduced-motion: reduce) {
+  .hero-layout {
+    height: auto;
+  }
+  .model-track {
+    height: 420px;
+    min-height: 0;
+  }
+  .model-dock {
+    position: relative;
+    height: 420px;
+  }
+}

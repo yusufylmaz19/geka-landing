@@ -1,4 +1,4 @@
-﻿# GEKA Yapı
+# GEKA Yapı
 
 Static construction and decoration site. No build step is required.
 
@@ -17,7 +17,7 @@ Edit `data.json` to change navigation, section text, services, featured projects
 
 - `style.css`: responsive layouts, locally hosted Manrope, off-white / matte navy palette.
 - `script.js`: JSON rendering, gallery filters and pagination, accessible photo/video dialog, mobile navigation, scroll reveals and parallax, consent-gated existing analytics.
-- `scene.js`: procedural Three.js architectural pavilion with scroll-driven exploded layers, pointer response, motion pause, reduced-motion support and photo fallback.
+- `scene.js`: procedural Three.js steel portal frame with I-section columns, rafters, bracing, base plates and staged assembly in a pinned scroll area, pointer response, motion pause, reduced-motion support and photo fallback.
 - `vendor/`: pinned Three.js 0.180.0 and Manrope variable font, with licenses. No runtime CDN is required for the design or 3D scene.
 
 Analytics loads only after consent. Existing `ga_consent` preferences are respected; preferences can be changed from the footer. WhatsApp and Instagram open their external sites.
