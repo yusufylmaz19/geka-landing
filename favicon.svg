@@ -1,15 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#00f5ff"/>
-      <stop offset="100%" stop-color="#0099aa"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="12" fill="#0a0a0a"/>
-  <!-- Steel beam / construction motif -->
-  <path d="M12 48 L32 12 L52 48 Z" fill="none" stroke="url(#g)" stroke-width="3" stroke-linejoin="round"/>
-  <line x1="20" y1="36" x2="44" y2="36" stroke="url(#g)" stroke-width="2.5"/>
-  <line x1="16" y1="42" x2="48" y2="42" stroke="url(#g)" stroke-width="2"/>
-  <!-- G letter hint -->
-  <text x="32" y="34" text-anchor="middle" font-family="Arial,sans-serif" font-weight="bold" font-size="16" fill="#00f5ff" opacity="0.9">G</text>
-</svg>
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#f5f3ec"/><path d="M32 5 56 19v27L32 59 8 45V19Z" fill="#202e40"/><g fill="none" stroke="#f5f3ec" stroke-width="1.5"><path d="m19 19 23 6-6 23-23-6Z"/><path d="m25 13 23 6-6 23-23-6Z"/><path d="m19 19 6-6m17 12 6-6M36 48l6-6M13 42l6-6"/></g></svg>

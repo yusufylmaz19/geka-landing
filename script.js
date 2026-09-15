@@ -1,823 +1,288 @@
-/* ========================================
-   GEKA Yapı — script.js
-   Vanilla JavaScript — No dependencies
-   v2: Cursor trail, enhanced scroll anims, muted videos
-   ======================================== */
-
-(function () {
-  'use strict';
-
-  // Global flag to prevent infinite scroll firing during smooth scroll
-  window.isAutoScrolling = false;
-  var autoScrollTimeout = null;
-  document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
-    anchor.addEventListener('click', function() {
-      var targetId = this.getAttribute('href');
-      if (targetId === '#') return;
-      var targetEl = document.querySelector(targetId);
-      if (targetEl) {
-        window.isAutoScrolling = true;
-        clearTimeout(autoScrollTimeout);
-        autoScrollTimeout = setTimeout(function() {
-          window.isAutoScrolling = false;
-        }, 1500); // Wait 1.5s for smooth scroll to finish
-      }
-    });
-  });
-
-  /* ──────────────────────────────────────
-     Cursor Trail Animation
-     ────────────────────────────────────── */
-  const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
-
-  if (!isTouchDevice) {
-    const dot = document.createElement('div');
-    dot.className = 'cursor-dot';
-    document.body.appendChild(dot);
-
-    const trail = document.createElement('div');
-    trail.className = 'cursor-trail';
-    document.body.appendChild(trail);
-
-    let mouseX = 0, mouseY = 0;
-    let trailX = 0, trailY = 0;
-
-    document.addEventListener('mousemove', function (e) {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      dot.style.left = mouseX - 3 + 'px';
-      dot.style.top = mouseY - 3 + 'px';
-    });
-
-    function animateTrail() {
-      trailX += (mouseX - trailX) * 0.12;
-      trailY += (mouseY - trailY) * 0.12;
-      trail.style.left = trailX - 14 + 'px';
-      trail.style.top = trailY - 14 + 'px';
-      requestAnimationFrame(animateTrail);
-    }
-    animateTrail();
-
-    // Expand cursor on interactive elements
-    const interactiveSelectors = 'a, button, .gallery-item, .service-card, .filter-btn, .btn, .wa-big-btn, .social-links a';
-
-    document.addEventListener('mouseover', function (e) {
-      if (e.target.closest(interactiveSelectors)) {
-        document.body.classList.add('cursor-hover');
-      }
-    });
-    document.addEventListener('mouseout', function (e) {
-      if (e.target.closest(interactiveSelectors)) {
-        document.body.classList.remove('cursor-hover');
-      }
-    });
-  }
-
-  /* ──────────────────────────────────────
-     Blueprint Canvas Background (enhanced)
-     ────────────────────────────────────── */
-  const canvas = document.getElementById('blueprint-canvas');
-  if (canvas) {
-    const ctx = canvas.getContext('2d');
-    let w, h;
-    let time = 0;
-    let sketches = [];
-
-    function resize() {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-      
-      if (sketches.length === 0) {
-        for(let i=0; i<8; i++) {
-          sketches.push({
-            x: Math.random() * 4000,
-            y: Math.random() * 4000,
-            scale: 0.6 + Math.random() * 1.4,
-            type: Math.floor(Math.random() * 4),
-            rotation: Math.random() * 0.2 - 0.1
-          });
-        }
-      }
-    }
-
-    function drawGrid() {
-      ctx.clearRect(0, 0, w, h);
-
-      const spacing = 55;
-      const offset = time * 0.12;
-      const pulse = Math.sin(time * 0.008) * 0.5 + 0.5;
-
-      // Major grid lines
-      ctx.strokeStyle = 'rgba(0, 220, 255, ' + (0.04 + pulse * 0.02) + ')';
-      ctx.lineWidth = 0.5;
-      for (let y = (offset % spacing); y < h; y += spacing) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(w, y);
-        ctx.stroke();
-      }
-      for (let x = (offset % spacing); x < w; x += spacing) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, h);
-        ctx.stroke();
-      }
-
-      // Minor subdivisions
-      ctx.strokeStyle = 'rgba(220, 235, 255, 0.015)';
-      ctx.lineWidth = 0.3;
-      var minor = spacing / 4;
-      for (let y = (offset % minor); y < h; y += minor) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(w, y);
-        ctx.stroke();
-      }
-      for (let x = (offset % minor); x < w; x += minor) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, h);
-        ctx.stroke();
-      }
-
-      // Diagonal accent lines
-      ctx.strokeStyle = 'rgba(220, 235, 255, ' + (0.02 + pulse * 0.015) + ')';
-      ctx.lineWidth = 0.6;
-      for (let i = -h; i < w + h; i += spacing * 3) {
-        ctx.beginPath();
-        ctx.moveTo(i + offset * 0.4, 0);
-        ctx.lineTo(i - h + offset * 0.4, h);
-        ctx.stroke();
-      }
-
-      // Glowing intersection nodes
-      var nodeAlpha = 0.06 + pulse * 0.06;
-      ctx.fillStyle = 'rgba(220, 235, 255, ' + nodeAlpha + ')';
-      for (let x = (offset % (spacing * 2)); x < w; x += spacing * 2) {
-        for (let y = (offset % (spacing * 2)); y < h; y += spacing * 2) {
-          ctx.beginPath();
-          ctx.arc(x, y, 2 + pulse, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-
-      // Scanline effect
-      var scanY = (time * 0.4) % h;
-      var grad = ctx.createLinearGradient(0, scanY - 30, 0, scanY + 30);
-      grad.addColorStop(0, 'rgba(220, 235, 255,0)');
-      grad.addColorStop(0.5, 'rgba(220, 235, 255,0.03)');
-      grad.addColorStop(1, 'rgba(220, 235, 255,0)');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, scanY - 30, w, 60);
-
-      // --- Architectural Sketches ---
-      ctx.strokeStyle = 'rgba(220, 235, 255, ' + (0.04 + pulse * 0.02) + ')';
-      ctx.lineWidth = 1;
-      
-      sketches.forEach(s => {
-        ctx.save();
-        let currentY = (s.y + time * 0.08) % (h + 600) - 300;
-        let currentX = s.x % (w + 600) - 300;
-        
-        ctx.translate(currentX, currentY);
-        ctx.rotate(s.rotation);
-        ctx.scale(s.scale, s.scale);
-        ctx.beginPath();
-        
-        if (s.type === 0) {
-          // House frame
-          ctx.moveTo(-50, 0); ctx.lineTo(50, 0); 
-          ctx.moveTo(-50, 0); ctx.lineTo(-50, -60); 
-          ctx.moveTo(50, 0); ctx.lineTo(50, -60); 
-          ctx.moveTo(-50, -60); ctx.lineTo(0, -100); ctx.lineTo(50, -60); 
-          ctx.moveTo(-60, -60); ctx.lineTo(60, -60); 
-          ctx.rect(-20, -40, 15, 20); 
-          ctx.moveTo(-20, -30); ctx.lineTo(-5, -30);
-          ctx.moveTo(-12.5, -40); ctx.lineTo(-12.5, -20);
-        } else if (s.type === 1) {
-          // Roof Truss
-          ctx.moveTo(-80, 0); ctx.lineTo(80, 0);
-          ctx.moveTo(-80, 0); ctx.lineTo(0, -60); ctx.lineTo(80, 0);
-          ctx.moveTo(-40, 0); ctx.lineTo(0, -60);
-          ctx.moveTo(40, 0); ctx.lineTo(0, -60);
-          ctx.moveTo(-40, 0); ctx.lineTo(-40, -30);
-          ctx.moveTo(40, 0); ctx.lineTo(40, -30);
-        } else if (s.type === 2) {
-          // I-Beam Isometric
-          ctx.moveTo(-20, -30); ctx.lineTo(20, -30); 
-          ctx.moveTo(-20, -26); ctx.lineTo(-2, -26);
-          ctx.lineTo(-2, 26); ctx.lineTo(-20, 26);
-          ctx.moveTo(20, -26); ctx.lineTo(2, -26);
-          ctx.lineTo(2, 26); ctx.lineTo(20, 26);
-          ctx.moveTo(-20, 30); ctx.lineTo(20, 30); 
-          ctx.moveTo(-20, -30); ctx.lineTo(-20, -26);
-          ctx.moveTo(20, -30); ctx.lineTo(20, -26);
-          ctx.moveTo(-20, 30); ctx.lineTo(-20, 26);
-          ctx.moveTo(20, 30); ctx.lineTo(20, 26);
-        } else if (s.type === 3) {
-          // Protractor / Arch blueprint
-          ctx.arc(0, 0, 50, Math.PI, Math.PI * 2);
-          ctx.arc(0, 0, 45, Math.PI, Math.PI * 2);
-          for(let a=Math.PI; a<=Math.PI*2; a+=Math.PI/12) {
-             ctx.moveTo(Math.cos(a)*45, Math.sin(a)*45);
-             ctx.lineTo(Math.cos(a)*50, Math.sin(a)*50);
-          }
-          ctx.moveTo(-60, 0); ctx.lineTo(60, 0);
-        }
-        
-        ctx.stroke();
-        
-        // Annotations
-        if (s.type === 0 || s.type === 1) {
-           ctx.strokeStyle = 'rgba(220, 235, 255, ' + (0.02 + pulse * 0.01) + ')';
-           ctx.beginPath();
-           ctx.moveTo(-80, 20); ctx.lineTo(80, 20);
-           ctx.moveTo(-80, 15); ctx.lineTo(-80, 25);
-           ctx.moveTo(80, 15); ctx.lineTo(80, 25);
-           ctx.stroke();
-           ctx.fillStyle = 'rgba(220, 235, 255, ' + (0.03 + pulse * 0.02) + ')';
-           ctx.font = "8px monospace";
-           ctx.fillText("4500 mm", -15, 32);
-        }
-        
-        ctx.restore();
-      });
-
-      time++;
-      requestAnimationFrame(drawGrid);
-    }
-
-    resize();
-    drawGrid();
-    window.addEventListener('resize', resize);
-  }
-
-  /* ──────────────────────────────────────
-     Navbar — Scroll Effect
-     ────────────────────────────────────── */
-  const navbar = document.getElementById('navbar');
-
-  function onScroll() {
-    if (window.scrollY > 50) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
-    }
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-
-  /* ──────────────────────────────────────
-     Hamburger Menu
-     ────────────────────────────────────── */
-  const hamburger = document.getElementById('hamburger');
-  const navLinks = document.getElementById('navLinks');
-  const navOverlay = document.getElementById('navOverlay');
-
-  function toggleMenu() {
-    const isOpen = hamburger.classList.toggle('open');
-    navLinks.classList.toggle('open');
-    navOverlay.classList.toggle('active');
-    hamburger.setAttribute('aria-expanded', isOpen);
-    document.body.style.overflow = isOpen ? 'hidden' : '';
-  }
-
-  function closeMenu() {
-    hamburger.classList.remove('open');
-    navLinks.classList.remove('open');
-    navOverlay.classList.remove('active');
-    hamburger.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-  }
-
-  hamburger.addEventListener('click', toggleMenu);
-  navOverlay.addEventListener('click', closeMenu);
-  navLinks.querySelectorAll('a').forEach(function (link) {
-    link.addEventListener('click', closeMenu);
-  });
-
-  /* ──────────────────────────────────────
-     Scroll Spy – Active Nav Link
-     ────────────────────────────────────── */
-  const sections = document.querySelectorAll('section[id]');
-  const navAnchors = navLinks.querySelectorAll('a');
-
-  function updateActiveLink() {
-    const scrollPos = window.scrollY + 120;
-    sections.forEach(function (section) {
-      const top = section.offsetTop;
-      const height = section.offsetHeight;
-      const id = section.getAttribute('id');
-      if (scrollPos >= top && scrollPos < top + height) {
-        navAnchors.forEach(function (a) {
-          a.classList.remove('active');
-          if (a.getAttribute('href') === '#' + id) {
-            a.classList.add('active');
-          }
-        });
-      }
-    });
-  }
-
-  window.addEventListener('scroll', updateActiveLink, { passive: true });
-
-  /* ──────────────────────────────────────
-     Enhanced Reveal on Scroll
-     (supports: .reveal, .reveal-left, .reveal-right, .reveal-scale)
-     ────────────────────────────────────── */
-  var allRevealClasses = '.reveal, .reveal-left, .reveal-right, .reveal-scale';
-  var revealElements = document.querySelectorAll(allRevealClasses);
-
-  var revealObserver = new IntersectionObserver(
-    function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          // Staggered delay
-          var parent = entry.target.parentElement;
-          if (parent) {
-            var siblings = Array.from(parent.querySelectorAll(allRevealClasses));
-            var idx = siblings.indexOf(entry.target);
-            entry.target.style.transitionDelay = (idx * 0.1) + 's';
-          }
-          entry.target.classList.add('visible');
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
+﻿const $ = (s, root = document) => root.querySelector(s);
+const esc = (value) =>
+  String(value).replace(
+    /[&<>"']/g,
+    (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
+        c
+      ],
   );
-
-  revealElements.forEach(function (el) {
-    revealObserver.observe(el);
+const lines = (value) => esc(value).replace(/\n/g, "<br>");
+const arrow = '<span class="arrow" aria-hidden="true">↗</span>';
+const num = (n) => String(n + 1).padStart(2, "0");
+const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+async function boot() {
+  const response = await fetch("./data.json");
+  if (!response.ok) throw new Error(`Content request: ${response.status}`);
+  const d = await response.json();
+  const heading = (s) =>
+    `<div class="section-heading reveal"><div class="eyebrow">${esc(s.eyebrow)}</div><h2>${lines(s.title)}</h2></div>`;
+  $("#app").innerHTML = `
+  <a class="skip" href="#main">${esc(d.ui.skip)}</a>
+  <header class="header wrap" id="hero"><a class="brand" href="#hero" aria-label="${esc(d.brand.name + " " + d.brand.suffix)}"><span class="brand-symbol" aria-hidden="true"></span><span class="brand-name">${esc(d.brand.name)}<small>${esc(d.brand.suffix)}</small></span></a><nav class="nav" id="navigation" aria-label="${esc(d.ui.menu)}">${d.nav.map((n) => `<a href="${esc(n.href)}">${esc(n.label)}</a>`).join("")}</nav><a class="header-cta" href="#iletisim">${esc(d.contact.cta)} ${arrow}</a><button class="menu-toggle" aria-expanded="false" aria-controls="navigation">${esc(d.ui.menu)} <span aria-hidden="true">☰</span></button></header>
+  <main id="main"><section class="hero wrap"><div class="hero-top"><div class="eyebrow">${esc(d.hero.eyebrow)}</div><span class="availability">${esc(d.hero.availability)}</span></div><div class="hero-layout"><div class="hero-copy"><h1>${esc(d.hero.title[0])}<br><span class="outline">${esc(d.hero.title[1])}</span><br>${esc(d.hero.title[2])}</h1><p>${esc(d.hero.description)}</p><div class="hero-actions"><a class="button" href="#galeri">${esc(d.hero.primary)} ${arrow}</a><a class="text-link" href="#hakkimizda">${esc(d.hero.secondary)} <span aria-hidden="true">↗</span></a></div></div><div class="model-stage" aria-hidden="true"><img class="model-fallback" src="${esc(d.hero.fallback)}" alt=""><canvas id="architecture"></canvas></div><div class="model-label">${esc(d.hero.model)}</div><button class="motion-toggle" hidden>${esc(d.ui.pause)}</button></div><div class="hero-bottom"><a href="#featured"><span aria-hidden="true">↓</span>${esc(d.hero.scroll)}</a><span class="index">${esc(d.hero.bottom)}</span><span>${esc(d.brand.location)}</span></div></section>
+  <div class="wrap"><section class="feature-image" id="featured"><img src="${esc(d.feature.image)}" alt="${esc(d.feature.alt)}" fetchpriority="high"><div class="feature-caption"><div><div class="eyebrow">${esc(d.feature.eyebrow)}</div><h2>${esc(d.feature.title)}</h2></div><a class="round-link" href="#galeri" aria-label="${esc(d.hero.primary)}">↗</a></div></section></div>
+  <section class="section wrap" id="hakkimizda"><div class="section-heading reveal"><div class="eyebrow">${esc(d.about.eyebrow)}</div><h2>${lines(d.about.title)}</h2><div class="about-text">${d.about.paragraphs.map((p) => `<p>${esc(p)}</p>`).join("")}</div></div><div class="stats reveal">${d.about.stats.map((s) => `<div class="stat"><strong>${esc(s.value)}</strong><span>${esc(s.label)}</span></div>`).join("")}</div></section>
+  <section class="section services" id="hizmetler"><div class="wrap">${heading(d.services)}<div class="services-layout"><div class="services-image reveal"><img src="${esc(d.services.image)}" alt="${esc(d.services.alt)}" loading="lazy"><p><span>${esc(d.services.caption)}</span><span>01 — 06</span></p></div><div>${d.services.items.map((s, i) => `<details name="services" ${i === 0 ? "open" : ""}><summary><span class="service-number">${num(i)}</span><h3>${esc(s.title)}</h3><span class="plus" aria-hidden="true">+</span></summary><p>${esc(s.description)}</p></details>`).join("")}</div></div></div></section>
+  <section class="section wrap" id="galeri"><div class="gallery-heading reveal"><div><div class="eyebrow">${esc(d.gallery.eyebrow)}</div><h2>${lines(d.gallery.title)}</h2></div><p>${esc(d.gallery.description)}</p></div><div class="project-wall">${d.gallery.projects.map((p, i) => `<figure class="project"><button data-project="${i}" aria-label="${esc(p.title + " — " + d.ui.open)}"><img src="${esc(p.image)}" alt="${esc(p.title)}" loading="lazy"><span class="project-open" aria-hidden="true">↗</span></button><figcaption><div><h3>${esc(p.title)}</h3><small>${esc(p.category)}</small></div><span class="project-index">/ ${num(i)}</span></figcaption></figure>`).join("")}</div><div class="archive-top"><div class="filters" aria-label="${esc(d.gallery.filters[0].label)}">${d.gallery.filters.map((f, i) => `<button class="filter" data-filter="${esc(f.id)}" aria-pressed="${i === 0}">${esc(f.label)}</button>`).join("")}</div><span class="archive-count" aria-live="polite"></span></div><div class="archive-grid"></div><div class="archive-actions"><button class="button" id="more">${esc(d.gallery.more)} <span aria-hidden="true">+</span></button></div></section>
+  <section class="section process wrap">${heading(d.process)}<div class="steps">${d.process.steps.map((s, i) => `<article class="step reveal"><small>/ ${num(i)}</small><h3>${esc(s.title)}</h3><p>${esc(s.description)}</p></article>`).join("")}</div></section>
+  <section class="contact" id="iletisim"><div class="wrap"><div class="eyebrow">${esc(d.contact.eyebrow)}</div><div class="contact-main"><h2>${lines(d.contact.title)}</h2><div class="contact-links"><a class="button light" href="${esc(d.contact.whatsapp)}" target="_blank" rel="noopener noreferrer">${esc(d.contact.whatsappLabel)} ${arrow}</a><a class="text-link" href="${esc(d.contact.phoneHref)}">${esc(d.contact.phone)} ${arrow}</a></div></div><div class="contact-details"><span>${esc(d.brand.name + " " + d.brand.suffix)}<br>${esc(d.contact.address)}</span><span>${esc(d.contact.hours)}<br>${esc(d.contact.closed)}</span><a href="${esc(d.contact.instagram)}" target="_blank" rel="noopener noreferrer">${esc(d.contact.socialLabel)} ↗</a></div><footer class="footer"><span>${esc(d.contact.copyright)}</span><a href="#hero">${esc(d.contact.top)} ↑</a></footer></div></section></main>
+  <dialog aria-label="${esc(d.ui.viewer)}"><div class="lightbox-bar"><span id="media-title"></span><button id="close" aria-label="${esc(d.ui.close)}">×</button></div><div class="lightbox-media"></div><div class="lightbox-controls"><button id="previous" aria-label="${esc(d.ui.previous)}">←</button><span id="media-counter" aria-live="polite"></span><button id="next" aria-label="${esc(d.ui.next)}">→</button></div></dialog>`;
+  const menu = $(".menu-toggle");
+  const closeMenu = () => {
+    menu.setAttribute("aria-expanded", "false");
+    $(".nav").classList.remove("open");
+  };
+  menu.onclick = () => {
+    const open = menu.getAttribute("aria-expanded") !== "true";
+    menu.setAttribute("aria-expanded", String(open));
+    $(".nav").classList.toggle("open", open);
+  };
+  $(".nav").addEventListener("click", closeMenu);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeMenu();
   });
-
-  /* ──────────────────────────────────────
-     Parallax-lite scroll effect on sections
-     ────────────────────────────────────── */
-  var parallaxSections = document.querySelectorAll('#hizmetler, #hakkimizda, #galeri, #iletisim');
-
-  function updateParallax() {
-    var scrollY = window.scrollY;
-    var winH = window.innerHeight;
-
-    parallaxSections.forEach(function (section) {
-      var rect = section.getBoundingClientRect();
-      var sectionMid = rect.top + rect.height / 2;
-      var viewMid = winH / 2;
-      var delta = (sectionMid - viewMid) / winH;
-      // Subtle upward parallax on bg
-      var shift = delta * -12;
-      section.style.transform = 'translateY(' + shift + 'px)';
-    });
+  const archive = d.gallery.media;
+  let filtered = archive,
+    shown = 8,
+    current = [],
+    position = 0,
+    opener;
+  function renderArchive() {
+    $(".archive-grid").innerHTML = filtered
+      .slice(0, shown)
+      .map(
+        (p, i) =>
+          `<button class="archive-item" data-media="${i}" aria-label="${esc(p.title + " — " + d.ui.open)}"><img src="${esc(p.type === "video" ? p.poster : p.src)}" alt="${esc(p.title)}" loading="lazy">${p.type === "video" ? '<span aria-hidden="true">▶</span>' : ""}</button>`,
+      )
+      .join("");
+    $(".archive-count").textContent =
+      `${Math.min(shown, filtered.length)} / ${filtered.length} ${d.gallery.countLabel}`;
+    $("#more").hidden = shown >= filtered.length;
   }
-
-  window.addEventListener('scroll', updateParallax, { passive: true });
-
-  /* ──────────────────────────────────────
-     Tilt effect on service cards
-     ────────────────────────────────────── */
-  if (!isTouchDevice) {
-    document.querySelectorAll('.service-card').forEach(function (card) {
-      card.addEventListener('mousemove', function (e) {
-        var rect = card.getBoundingClientRect();
-        var x = (e.clientX - rect.left) / rect.width - 0.5;
-        var y = (e.clientY - rect.top) / rect.height - 0.5;
-        card.style.transform = 'translateY(-8px) perspective(600px) rotateX(' + (y * -6) + 'deg) rotateY(' + (x * 6) + 'deg)';
-      });
-      card.addEventListener('mouseleave', function () {
-        card.style.transform = '';
-      });
-    });
+  $(".filters").onclick = (e) => {
+    const b = e.target.closest("[data-filter]");
+    if (!b) return;
+    document
+      .querySelectorAll(".filter")
+      .forEach((f) => f.setAttribute("aria-pressed", String(f === b)));
+    filtered = archive.filter(
+      (p) => b.dataset.filter === "all" || p.type === b.dataset.filter,
+    );
+    shown = 8;
+    renderArchive();
+  };
+  $("#more").onclick = () => {
+    const firstNew = shown;
+    shown += 12;
+    renderArchive();
+    $(`[data-media="${firstNew}"]`)?.focus({ preventScroll: true });
+  };
+  const dialog = $("dialog");
+  function showMedia() {
+    const p = current[position];
+    $(".lightbox-media").replaceChildren();
+    const media = document.createElement(p.type === "video" ? "video" : "img");
+    media.src = p.src;
+    if (p.type === "video") {
+      media.controls = true;
+      media.playsInline = true;
+      media.preload = "metadata";
+    } else media.alt = p.title;
+    $(".lightbox-media").append(media);
+    $("#media-title").textContent = p.title;
+    $("#media-counter").textContent = `${position + 1} / ${current.length}`;
   }
-
-  /* ──────────────────────────────────────
-     Count-Up Animation
-     ────────────────────────────────────── */
-  var statNumbers = document.querySelectorAll('.stat-number');
-
-  var countObserver = new IntersectionObserver(
-    function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          var el = entry.target;
-          var target = parseInt(el.getAttribute('data-target'), 10);
-          var countEl = el.querySelector('.count');
-          animateCount(countEl, 0, target, 2000);
-          countObserver.unobserve(el);
+  function openMedia(items, i, button) {
+    current = items;
+    position = i;
+    opener = button;
+    showMedia();
+    dialog.showModal();
+    document.body.classList.add("modal-open");
+    $("#close").focus();
+  }
+  $(".archive-grid").onclick = (e) => {
+    const b = e.target.closest("[data-media]");
+    if (b) openMedia(filtered, Number(b.dataset.media), b);
+  };
+  $(".project-wall").onclick = (e) => {
+    const b = e.target.closest("[data-project]");
+    if (b)
+      openMedia(
+        d.gallery.projects.map((p) => ({
+          src: p.image,
+          type: "image",
+          title: p.title,
+        })),
+        Number(b.dataset.project),
+        b,
+      );
+  };
+  const move = (delta) => {
+    position = (position + delta + current.length) % current.length;
+    showMedia();
+  };
+  $("#previous").onclick = () => move(-1);
+  $("#next").onclick = () => move(1);
+  $("#close").onclick = () => dialog.close();
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) {
+      const r = dialog.getBoundingClientRect();
+      if (
+        e.clientX < r.left ||
+        e.clientX > r.right ||
+        e.clientY < r.top ||
+        e.clientY > r.bottom
+      )
+        dialog.close();
+    }
+  });
+  dialog.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      move(-1);
+    }
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      move(1);
+    }
+  });
+  dialog.addEventListener("close", () => {
+    $(".lightbox-media").replaceChildren();
+    document.body.classList.remove("modal-open");
+    opener?.focus({ preventScroll: true });
+  });
+  renderArchive();
+  const observer = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("seen");
+          observer.unobserve(e.target);
         }
-      });
-    },
-    { threshold: 0.4 }
+      }),
+    { threshold: 0.12 },
   );
-
-  statNumbers.forEach(function (el) {
-    countObserver.observe(el);
-  });
-
-  function animateCount(el, start, end, duration) {
-    var startTime = performance.now();
-    function step(now) {
-      var progress = Math.min((now - startTime) / duration, 1);
-      var eased = 1 - Math.pow(1 - progress, 3); // ease out cubic
-      el.textContent = Math.floor(eased * (end - start) + start);
-      if (progress < 1) {
-        requestAnimationFrame(step);
-      } else {
-        el.textContent = end;
-      }
-    }
-    requestAnimationFrame(step);
+  document.querySelectorAll(".reveal").forEach((e) => observer.observe(e));
+  import("./scene.js")
+    .then((m) => m.initScene(d.ui))
+    .catch((e) =>
+      console.warn(
+        "Architectural scene unavailable; photo fallback retained.",
+        e,
+      ),
+    );
+  initScroll();
+  initPrivacy(d.privacy);
+  const credit = d.contact.credit;
+  $(".footer").insertAdjacentHTML(
+    "afterend",
+    `<div class="site-credit"><span>${esc(credit.label)} <a href="${esc(credit.website)}" target="_blank" rel="noopener noreferrer"><strong>${esc(credit.name)}</strong></a></span><div class="site-credit-links"><a href="${esc(credit.phoneHref)}">${esc(credit.phone)}</a><a href="${esc(credit.instagram)}" target="_blank" rel="noopener noreferrer" aria-label="Instagram: ${esc(credit.instagramLabel)}">${esc(credit.instagramLabel)} ↗</a></div></div>`,
+  );
+}
+function initPrivacy(copy) {
+  const id = "G-ZVEB9FZZJP";
+  let consent;
+  try {
+    consent = localStorage.getItem("ga_consent");
+  } catch {}
+  let loaded = false;
+  function analytics() {
+    window["ga-disable-" + id] = false;
+    if (loaded) return;
+    loaded = true;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () {
+      window.dataLayer.push(arguments);
+    };
+    window.gtag("js", new Date());
+    window.gtag("config", id);
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = "https://www.googletagmanager.com/gtag/js?id=" + id;
+    document.head.append(script);
   }
-
-  /* ──────────────────────────────────────
-     Dynamic Gallery Initialization & Load More
-     ────────────────────────────────────── */
-  var galleryGrid = document.getElementById('galleryGrid');
-  var loadMoreContainer = document.getElementById('galleryLoadMoreContainer');
-  var galleryCount = document.getElementById('galleryCount');
-  
-  var galleryData = [];
-  var currentFilter = 'all';
-  var itemsPerPage = 12;
-  var currentPage = 0;
-  var filteredData = [];
-  var galleryItems = document.querySelectorAll('.gallery-item'); // Initialize
-
-  if (galleryGrid) {
-    for (var j = 1; j <= 8; j++) galleryData.push({ type: 'video', index: j });
-    for (var i = 1; i <= 95; i++) galleryData.push({ type: 'image', index: i });
-    
-    // Shuffle the array for a diverse layout
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
-    shuffle(galleryData);
-
-    function createGalleryItem(data) {
-      var type = data.type;
-      var index = data.index;
-
-      var item = document.createElement('div');
-      item.className = 'gallery-item reveal-scale';
-      item.setAttribute('data-type', type);
-
-      var overlay = document.createElement('div');
-      overlay.className = 'overlay';
-      overlay.innerHTML = '<span>' + (type === 'image' ? 'Görüntüle' : 'Oynat') + '</span>';
-
-      if (type === 'image') {
-        var img = document.createElement('img');
-        img.loading = 'lazy';
-        img.onerror = function() { item.remove(); };
-        img.src = 'galeri/images/' + index + '.jpeg';
-        item.appendChild(img);
-      } else {
-        var vid = document.createElement('video');
-        vid.muted = true;
-        vid.loop = true;
-        vid.preload = 'none';
-        vid.onerror = function() { item.remove(); };
-        vid.src = 'galeri/videos/' + index + '.mp4';
-        item.appendChild(vid);
-
-        var vidObserver = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              vid.load();
-              // Try to play if possible
-              var playPromise = vid.play();
-              if (playPromise !== undefined) {
-                playPromise.catch(() => {});
-              }
-              vidObserver.unobserve(vid);
-            }
-          });
-        });
-        vidObserver.observe(vid);
-
-        var indicator = document.createElement('div');
-        indicator.className = 'video-indicator';
-        indicator.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>';
-        item.appendChild(indicator);
-      }
-      
-      item.appendChild(overlay);
-      revealObserver.observe(item);
-      return item;
-    }
-
-    function renderGallery() {
-      var start = currentPage * itemsPerPage;
-      var end = start + itemsPerPage;
-      var itemsToRender = filteredData.slice(start, end);
-      
-      itemsToRender.forEach(function(data) {
-        galleryGrid.appendChild(createGalleryItem(data));
-      });
-
-      if (end >= filteredData.length) {
-        loadMoreContainer.style.display = 'none';
-        end = filteredData.length;
-      } else {
-        loadMoreContainer.style.display = 'block';
-      }
-      
-      if (galleryCount) {
-        galleryCount.textContent = end + ' / ' + filteredData.length + ' görsel gösteriliyor';
-      }
-      
-      galleryItems = document.querySelectorAll('.gallery-item');
-      
-      // Update lightbox items
-      currentItems = getVisibleItems();
-    }
-
-    function applyFilter(filter) {
-      currentFilter = filter;
-      if (filter === 'all') {
-        filteredData = galleryData;
-      } else {
-        filteredData = galleryData.filter(item => item.type === filter);
-      }
-      galleryGrid.innerHTML = '';
-      currentPage = 0;
-      renderGallery();
-    }
-
-    filteredData = galleryData;
-    renderGallery();
-
-    // Infinite scroll observer to auto-load more items when near the bottom
-    var infiniteScrollObserver = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting && loadMoreContainer.style.display !== 'none') {
-          if (window.isAutoScrolling) return; // Prevent loading during smooth scroll to anchor
-          currentPage++;
-          renderGallery();
-        }
-      });
-    }, { rootMargin: '0px 0px 600px 0px' });
-    
-    infiniteScrollObserver.observe(loadMoreContainer);
-
-    /* ──────────────────────────────────────
-       Gallery Filters
-       ────────────────────────────────────── */
-    var filterBtns = document.querySelectorAll('.filter-btn');
-
-    filterBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        filterBtns.forEach(function (b) { b.classList.remove('active'); });
-        btn.classList.add('active');
-        var filter = btn.getAttribute('data-filter');
-
-        if (typeof trackEvent === 'function') trackEvent('gallery_filter_click', { filter_type: filter });
-
-        applyFilter(filter);
-      });
+  const panel = document.createElement("aside");
+  panel.className = "cookie-panel";
+  panel.setAttribute("aria-label", copy.title);
+  panel.innerHTML = `<strong>${esc(copy.title)}</strong><p>${esc(copy.description)}</p><div class="cookie-actions"><button data-consent="denied">${esc(copy.decline)}</button><button data-consent="granted">${esc(copy.accept)}</button></div>`;
+  panel.hidden = !!consent;
+  document.body.append(panel);
+  const settings = document.createElement("button");
+  settings.className = "privacy-settings";
+  settings.textContent = copy.settings;
+  $(".footer").append(settings);
+  settings.onclick = () => {
+    panel.hidden = false;
+    $("button", panel).focus();
+  };
+  panel.onclick = (e) => {
+    const button = e.target.closest("[data-consent]");
+    if (!button) return;
+    consent = button.dataset.consent;
+    try {
+      localStorage.setItem("ga_consent", consent);
+    } catch {}
+    if (consent === "granted") analytics();
+    else window["ga-disable-" + id] = true;
+    panel.hidden = true;
+    settings.focus({ preventScroll: true });
+  };
+  if (consent === "granted") analytics();
+  document.addEventListener("click", (e) => {
+    if (consent !== "granted" || !window.gtag) return;
+    const link = e.target.closest("a");
+    if (!link) return;
+    if (link.href.includes("wa.me/")) window.gtag("event", "whatsapp_click");
+    else if (link.href.startsWith("tel:")) window.gtag("event", "phone_click");
+    else if (link.href.includes("instagram.com/"))
+      window.gtag("event", "social_click", { network: "instagram" });
+  });
+}
+function initScroll() {
+  const feature = $(".feature-image"),
+    photo = $(".feature-image img"),
+    projects = [...document.querySelectorAll(".project")];
+  let pending = false;
+  function draw() {
+    pending = false;
+    if (reduced.matches) return;
+    const rect = feature.getBoundingClientRect();
+    const p = Math.max(
+      0,
+      Math.min(1, (innerHeight - rect.top) / (innerHeight + rect.height)),
+    );
+    photo.style.transform = `translateY(${-p * 15}%)`;
+    projects.forEach((el, i) => {
+      const r = el.getBoundingClientRect();
+      const progress = Math.max(
+        -1,
+        Math.min(1, (r.top - innerHeight / 2) / innerHeight),
+      );
+      el.style.transform = `translateY(${progress * (i % 2 ? 28 : -16)}px)`;
     });
   }
-
-  /* ──────────────────────────────────────
-     Lightbox
-     ────────────────────────────────────── */
-  var lightbox = document.getElementById('lightbox');
-  var lbContent = document.getElementById('lbContent');
-  var lbClose = document.getElementById('lbClose');
-  var lbPrev = document.getElementById('lbPrev');
-  var lbNext = document.getElementById('lbNext');
-  var lbCounter = document.getElementById('lbCounter');
-
-  var currentItems = [];
-  var currentIndex = 0;
-
-  function getVisibleItems() {
-    return Array.from(galleryItems).filter(function (item) {
-      return item.style.display !== 'none' && item.parentNode !== null;
-    });
-  }
-
-  function openLightbox(index) {
-    currentItems = getVisibleItems();
-    currentIndex = index;
-    showLightboxItem();
-    lightbox.classList.add('active');
-    document.body.style.overflow = 'hidden';
-
-    if (typeof trackEvent === 'function') {
-      var item = currentItems[index];
-      if (item) trackEvent('lightbox_open', { item_type: item.getAttribute('data-type') });
-    }
-  }
-
-  function closeLightbox() {
-    lightbox.classList.remove('active');
-    document.body.style.overflow = '';
-    var vid = lbContent.querySelector('video');
-    if (vid) vid.pause();
-    lbContent.innerHTML = '';
-  }
-
-  function showLightboxItem() {
-    var prevVid = lbContent.querySelector('video');
-    if (prevVid) prevVid.pause();
-    lbContent.innerHTML = '';
-
-    var item = currentItems[currentIndex];
-    var type = item.getAttribute('data-type');
-
-    if (type === 'video') {
-      var vid = item.querySelector('video');
-      var newVid = document.createElement('video');
-      newVid.src = vid.src;
-      newVid.autoplay = true;
-      newVid.muted = true;
-      newVid.loop = true;
-      newVid.controls = false; // no controls so user cannot unmute
-      newVid.style.maxWidth = '90vw';
-      newVid.style.maxHeight = '85vh';
-      newVid.style.borderRadius = '6px';
-      lbContent.appendChild(newVid);
-    } else {
-      var img = item.querySelector('img');
-      var newImg = document.createElement('img');
-      newImg.src = img.src;
-      newImg.alt = img.alt;
-      lbContent.appendChild(newImg);
-    }
-
-    lbCounter.textContent = (currentIndex + 1) + ' / ' + currentItems.length;
-  }
-
-  function prevItem() {
-    currentIndex = (currentIndex - 1 + currentItems.length) % currentItems.length;
-    showLightboxItem();
-  }
-
-  function nextItem() {
-    currentIndex = (currentIndex + 1) % currentItems.length;
-    showLightboxItem();
-  }
-
-  if (galleryGrid) {
-    galleryGrid.addEventListener('click', function (e) {
-      var item = e.target.closest('.gallery-item');
-      if (!item) return;
-      var visibleItems = getVisibleItems();
-      var idx = visibleItems.indexOf(item);
-      if (idx > -1) {
-        openLightbox(idx);
+  addEventListener(
+    "scroll",
+    () => {
+      if (!pending) {
+        pending = true;
+        requestAnimationFrame(draw);
       }
-    });
-  }
-
-  lbClose.addEventListener('click', closeLightbox);
-  lbPrev.addEventListener('click', prevItem);
-  lbNext.addEventListener('click', nextItem);
-
-  lightbox.addEventListener('click', function (e) {
-    if (e.target === lightbox) closeLightbox();
+    },
+    { passive: true },
+  );
+  addEventListener("resize", draw);
+  reduced.addEventListener("change", () => {
+    photo.style.transform = "";
+    projects.forEach((p) => (p.style.transform = ""));
+    draw();
   });
-
-  document.addEventListener('keydown', function (e) {
-    if (!lightbox.classList.contains('active')) return;
-    if (e.key === 'Escape')      closeLightbox();
-    if (e.key === 'ArrowLeft')   prevItem();
-    if (e.key === 'ArrowRight')  nextItem();
-  });
-
-  // Mouse wheel navigation for lightbox with throttle
-  var wheelTimeout = null;
-  lightbox.addEventListener('wheel', function(e) {
-    if (!lightbox.classList.contains('active')) return;
-    e.preventDefault(); // prevent page scroll
-    
-    if (wheelTimeout) return; // ignore events if we just scrolled
-    
-    if (e.deltaY > 0) {
-      nextItem();
-    } else if (e.deltaY < 0) {
-      prevItem();
-    }
-    
-    // Lock scrolling for 400ms to prevent skipping multiple items
-    wheelTimeout = setTimeout(function() {
-      wheelTimeout = null;
-    }, 400);
-  }, { passive: false });
-
-  // Swipe & Grab Navigation for Lightbox
-  var startX = 0;
-  var endX = 0;
-  var isDragging = false;
-
-  function handleSwipe() {
-    var threshold = 50; // Minimum swipe distance
-    var distance = endX - startX;
-    if (Math.abs(distance) > threshold) {
-      if (distance < 0) {
-        nextItem(); // Swipe left -> Next
-      } else {
-        prevItem(); // Swipe right -> Prev
-      }
-    }
-  }
-
-  // Touch Events (Mobile)
-  lightbox.addEventListener('touchstart', function(e) {
-    if (!lightbox.classList.contains('active')) return;
-    startX = e.changedTouches[0].screenX;
-  }, { passive: true });
-
-  lightbox.addEventListener('touchend', function(e) {
-    if (!lightbox.classList.contains('active')) return;
-    endX = e.changedTouches[0].screenX;
-    handleSwipe();
-  }, { passive: true });
-
-  // Mouse Events (Desktop Drag)
-  lightbox.addEventListener('mousedown', function(e) {
-    if (!lightbox.classList.contains('active')) return;
-    if (e.target.closest('button')) return; // Don't trigger if clicking navigation buttons
-    isDragging = true;
-    startX = e.clientX;
-    lightbox.style.cursor = 'grabbing';
-  });
-
-  lightbox.addEventListener('mouseup', function(e) {
-    if (!isDragging || !lightbox.classList.contains('active')) return;
-    isDragging = false;
-    endX = e.clientX;
-    lightbox.style.cursor = '';
-    handleSwipe();
-  });
-
-  lightbox.addEventListener('mouseleave', function() {
-    if (isDragging) {
-      isDragging = false;
-      lightbox.style.cursor = '';
-    }
-  });
-
-  /* ──────────────────────────────────────
-     Section title glow on scroll
-     ────────────────────────────────────── */
-  document.querySelectorAll('.section-title').forEach(function (title) {
-    var glowObserver = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          title.style.transition = 'text-shadow 1s';
-          title.style.textShadow = '0 0 60px rgba(220, 235, 255,.2), 0 0 120px rgba(220, 235, 255,.08)';
-        }
-      });
-    }, { threshold: 0.5 });
-    glowObserver.observe(title);
-  });
-
-  /* ──────────────────────────────────────
-     Cookie Consent
-     ────────────────────────────────────── */
-  const cookieConsent = document.getElementById('cookieConsent');
-  const ccAccept = document.getElementById('ccAccept');
-  const ccDecline = document.getElementById('ccDecline');
-
-  if (cookieConsent && ccAccept && ccDecline) {
-    const consent = localStorage.getItem('ga_consent');
-    
-    if (!consent) {
-      setTimeout(function() {
-        cookieConsent.classList.add('show');
-      }, 2000);
-    }
-
-    ccAccept.addEventListener('click', function() {
-      localStorage.setItem('ga_consent', 'granted');
-      cookieConsent.classList.remove('show');
-      
-      // Load GA dynamically
-      if (typeof window.dataLayer === 'undefined' || (window.dataLayer && window.dataLayer.length === 0)) {
-        let script = document.createElement('script');
-        script.async = true;
-        script.src = "https://www.googletagmanager.com/gtag/js?id=G-ZVEB9FZZJP";
-        document.head.appendChild(script);
-
-        gtag('js', new Date());
-        gtag('config', 'G-ZVEB9FZZJP');
-      }
-    });
-
-    ccDecline.addEventListener('click', function() {
-      localStorage.setItem('ga_consent', 'denied');
-      cookieConsent.classList.remove('show');
-    });
-  }
-
-  /* ──────────────────────────────────────
-     Init
-     ────────────────────────────────────── */
-  onScroll();
-  updateActiveLink();
-})();
+  draw();
+}
+boot().catch((error) => {
+  console.error(error);
+  $("#app").innerHTML =
+    '<div class="loading"><h1>GEKA Yapı</h1><p>İçerik yüklenemedi. Lütfen bağlantınızı kontrol edip sayfayı yenileyin.</p><p>Yerel önizleme için siteyi bir HTTP sunucusu üzerinden açın.</p><a class="button" href="tel:+905308820849">0530 882 08 49 ↗</a></div>';
+});

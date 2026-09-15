@@ -1,0 +1,726 @@
+{
+  "brand": {
+    "name": "GEKA",
+    "suffix": "YAPI",
+    "location": "İSTANBUL, TÜRKİYE",
+    "tagline": "YAPI & DEKORASYON"
+  },
+  "nav": [
+    {
+      "label": "Hakkımızda",
+      "href": "#hakkimizda"
+    },
+    {
+      "label": "Uzmanlıklarımız",
+      "href": "#hizmetler"
+    },
+    {
+      "label": "Projeler",
+      "href": "#galeri"
+    }
+  ],
+  "hero": {
+    "eyebrow": "SAĞLAM TEMELLER. İNCE DETAYLAR.",
+    "title": ["Sağlam fikirler.", "Yaşayan", "mekânlar."],
+    "description": "Çeliğin gücünü, tasarımın inceliğiyle buluşturuyoruz. İlk çizgiden son dokunuşa, mekânınıza değer katıyoruz.",
+    "primary": "Projeleri keşfedin",
+    "secondary": "Bizi tanıyın",
+    "availability": "Yeni projelere birlikte başlayalım",
+    "scroll": "KEŞFETMEK İÇİN KAYDIRIN",
+    "bottom": "ÇELİK · YAPI · DEKORASYON",
+    "model": "01 / YAPININ KATMANLARI",
+    "fallback": "galeri/images/94.jpeg"
+  },
+  "feature": {
+    "image": "galeri/images/77.jpeg",
+    "alt": "GEKA Yapı tarafından tamamlanan aydınlatmalı tavan ve toplantı alanı",
+    "eyebrow": "FİKİRDEN GERÇEĞE",
+    "title": "Her detayda aynı özen."
+  },
+  "about": {
+    "eyebrow": "01 / BİZ KİMİZ",
+    "title": "Yapıya güç,\nmekâna karakter katıyoruz.",
+    "paragraphs": [
+      "15 yılı aşkın deneyimimizle İstanbul’da yapı ve dekorasyon projelerini hayata geçiriyoruz. Çelik konstrüksiyondan iç mekân uygulamalarına kadar, her aşamada sağlamlığı ve estetiği birlikte düşünüyoruz.",
+      "İyi bir sonuç, doğru detaylarla başlar. Deneyimli ekibimizle ev, ofis ve ticari alanlar için ihtiyaca özel çözümler üretiyor; keşiften teslimata kadar projenizin yanında oluyoruz."
+    ],
+    "stats": [
+      {
+        "value": "15+",
+        "label": "Yıllık deneyim"
+      },
+      {
+        "value": "500+",
+        "label": "Tamamlanan proje"
+      },
+      {
+        "value": "50+",
+        "label": "Uzman ekip"
+      }
+    ]
+  },
+  "services": {
+    "eyebrow": "02 / UZMANLIKLARIMIZ",
+    "title": "Bir yapının ihtiyacı.\nTek bir çözüm ortağı.",
+    "image": "galeri/images/95.jpeg",
+    "alt": "Çelik konstrüksiyon çatı taşıyıcı sistemi",
+    "caption": "GÜÇLÜ BİR YAPININ BAŞLANGICI",
+    "items": [
+      {
+        "title": "Çelik çatı sistemleri",
+        "description": "Konut, fabrika ve depo projeleri için dayanıklı çelik çatı yapımı, onarımı ve izolasyonu. Doğru malzeme, titiz montaj ve uzun ömürlü koruma."
+      },
+      {
+        "title": "Asma tavan & aydınlatma",
+        "description": "Mekânın karakterini tamamlayan asma tavanlar, spot ve LED aydınlatma detayları. Estetik görünümü akustik ve işlevsel çözümlerle birleştiriyoruz."
+      },
+      {
+        "title": "Alçıpan bölme duvar",
+        "description": "Ofis, mağaza ve yaşam alanları için esnek planlama. Isı, ses ve yangın dayanımı ihtiyaçlarına uygun alçıpan sistemleriyle temiz ve hızlı uygulama."
+      },
+      {
+        "title": "Mantolama & yalıtım",
+        "description": "Binalarınızı soğuk, nem ve dış etkenlere karşı koruyan dış cephe mantolama uygulamaları. Enerji verimliliği için doğru yalıtım çözümleri."
+      },
+      {
+        "title": "Cephe kaplama",
+        "description": "Kompozit panel, alüminyum ve cam cephe uygulamalarıyla yapınızın dış görünümüne çağdaş bir kimlik kazandırıyoruz."
+      },
+      {
+        "title": "Çelik konstrüksiyon",
+        "description": "Hafif ve ağır çelik sistemler; endüstriyel tesis, hangar ve depo projelerinde sağlam taşıyıcı yapılar ve anahtar teslim montaj hizmetleri."
+      }
+    ]
+  },
+  "gallery": {
+    "eyebrow": "03 / SEÇİLİ UYGULAMALAR",
+    "title": "İşimiz,\nkendini anlatır.",
+    "description": "Çizgilerin mekâna dönüştüğü anlar. Uygulamalarımızdan detaylara ve tamamlanan yaşam alanlarına bir bakış.",
+    "projects": [
+      {
+        "image": "galeri/images/47.jpeg",
+        "title": "Doğayla buluşan iç mekânlar",
+        "category": "İÇ MEKÂN & DEKORASYON"
+      },
+      {
+        "image": "galeri/images/29.jpeg",
+        "title": "Tavana uzanan bir ritim",
+        "category": "ASMA TAVAN & AYDINLATMA"
+      },
+      {
+        "image": "galeri/images/94.jpeg",
+        "title": "Gücün görünür hâli",
+        "category": "ÇELİK KONSTRÜKSİYON"
+      },
+      {
+        "image": "galeri/images/14.jpeg",
+        "title": "Detaylarda bütünlük",
+        "category": "ANAHTAR TESLİM UYGULAMA"
+      }
+    ],
+    "filters": [
+      {
+        "id": "all",
+        "label": "Tüm arşiv"
+      },
+      {
+        "id": "image",
+        "label": "Fotoğraflar"
+      },
+      {
+        "id": "video",
+        "label": "Videolar"
+      }
+    ],
+    "more": "Daha fazla göster",
+    "countLabel": "uygulama karesi",
+    "imageLabel": "Uygulama fotoğrafı",
+    "videoLabel": "Uygulama videosu",
+    "media": [
+      {
+        "type": "image",
+        "src": "galeri/images/95.jpeg",
+        "title": "Uygulama fotoğrafı 95"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/94.jpeg",
+        "title": "Uygulama fotoğrafı 94"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/93.jpeg",
+        "title": "Uygulama fotoğrafı 93"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/92.jpeg",
+        "title": "Uygulama fotoğrafı 92"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/91.jpeg",
+        "title": "Uygulama fotoğrafı 91"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/90.jpeg",
+        "title": "Uygulama fotoğrafı 90"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/89.jpeg",
+        "title": "Uygulama fotoğrafı 89"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/88.jpeg",
+        "title": "Uygulama fotoğrafı 88"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/87.jpeg",
+        "title": "Uygulama fotoğrafı 87"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/86.jpeg",
+        "title": "Uygulama fotoğrafı 86"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/85.jpeg",
+        "title": "Uygulama fotoğrafı 85"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/84.jpeg",
+        "title": "Uygulama fotoğrafı 84"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/83.jpeg",
+        "title": "Uygulama fotoğrafı 83"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/82.jpeg",
+        "title": "Uygulama fotoğrafı 82"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/81.jpeg",
+        "title": "Uygulama fotoğrafı 81"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/80.jpeg",
+        "title": "Uygulama fotoğrafı 80"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/79.jpeg",
+        "title": "Uygulama fotoğrafı 79"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/78.jpeg",
+        "title": "Uygulama fotoğrafı 78"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/77.jpeg",
+        "title": "Uygulama fotoğrafı 77"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/76.jpeg",
+        "title": "Uygulama fotoğrafı 76"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/75.jpeg",
+        "title": "Uygulama fotoğrafı 75"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/74.jpeg",
+        "title": "Uygulama fotoğrafı 74"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/73.jpeg",
+        "title": "Uygulama fotoğrafı 73"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/72.jpeg",
+        "title": "Uygulama fotoğrafı 72"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/71.jpeg",
+        "title": "Uygulama fotoğrafı 71"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/70.jpeg",
+        "title": "Uygulama fotoğrafı 70"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/69.jpeg",
+        "title": "Uygulama fotoğrafı 69"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/68.jpeg",
+        "title": "Uygulama fotoğrafı 68"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/67.jpeg",
+        "title": "Uygulama fotoğrafı 67"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/66.jpeg",
+        "title": "Uygulama fotoğrafı 66"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/65.jpeg",
+        "title": "Uygulama fotoğrafı 65"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/64.jpeg",
+        "title": "Uygulama fotoğrafı 64"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/63.jpeg",
+        "title": "Uygulama fotoğrafı 63"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/62.jpeg",
+        "title": "Uygulama fotoğrafı 62"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/61.jpeg",
+        "title": "Uygulama fotoğrafı 61"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/60.jpeg",
+        "title": "Uygulama fotoğrafı 60"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/59.jpeg",
+        "title": "Uygulama fotoğrafı 59"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/58.jpeg",
+        "title": "Uygulama fotoğrafı 58"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/57.jpeg",
+        "title": "Uygulama fotoğrafı 57"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/56.jpeg",
+        "title": "Uygulama fotoğrafı 56"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/55.jpeg",
+        "title": "Uygulama fotoğrafı 55"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/54.jpeg",
+        "title": "Uygulama fotoğrafı 54"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/53.jpeg",
+        "title": "Uygulama fotoğrafı 53"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/52.jpeg",
+        "title": "Uygulama fotoğrafı 52"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/51.jpeg",
+        "title": "Uygulama fotoğrafı 51"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/50.jpeg",
+        "title": "Uygulama fotoğrafı 50"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/49.jpeg",
+        "title": "Uygulama fotoğrafı 49"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/48.jpeg",
+        "title": "Uygulama fotoğrafı 48"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/47.jpeg",
+        "title": "Uygulama fotoğrafı 47"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/46.jpeg",
+        "title": "Uygulama fotoğrafı 46"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/45.jpeg",
+        "title": "Uygulama fotoğrafı 45"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/44.jpeg",
+        "title": "Uygulama fotoğrafı 44"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/43.jpeg",
+        "title": "Uygulama fotoğrafı 43"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/42.jpeg",
+        "title": "Uygulama fotoğrafı 42"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/41.jpeg",
+        "title": "Uygulama fotoğrafı 41"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/40.jpeg",
+        "title": "Uygulama fotoğrafı 40"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/39.jpeg",
+        "title": "Uygulama fotoğrafı 39"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/38.jpeg",
+        "title": "Uygulama fotoğrafı 38"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/37.jpeg",
+        "title": "Uygulama fotoğrafı 37"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/36.jpeg",
+        "title": "Uygulama fotoğrafı 36"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/35.jpeg",
+        "title": "Uygulama fotoğrafı 35"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/34.jpeg",
+        "title": "Uygulama fotoğrafı 34"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/33.jpeg",
+        "title": "Uygulama fotoğrafı 33"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/32.jpeg",
+        "title": "Uygulama fotoğrafı 32"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/31.jpeg",
+        "title": "Uygulama fotoğrafı 31"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/30.jpeg",
+        "title": "Uygulama fotoğrafı 30"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/29.jpeg",
+        "title": "Uygulama fotoğrafı 29"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/28.jpeg",
+        "title": "Uygulama fotoğrafı 28"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/27.jpeg",
+        "title": "Uygulama fotoğrafı 27"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/26.jpeg",
+        "title": "Uygulama fotoğrafı 26"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/25.jpeg",
+        "title": "Uygulama fotoğrafı 25"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/24.jpeg",
+        "title": "Uygulama fotoğrafı 24"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/23.jpeg",
+        "title": "Uygulama fotoğrafı 23"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/22.jpeg",
+        "title": "Uygulama fotoğrafı 22"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/21.jpeg",
+        "title": "Uygulama fotoğrafı 21"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/20.jpeg",
+        "title": "Uygulama fotoğrafı 20"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/19.jpeg",
+        "title": "Uygulama fotoğrafı 19"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/18.jpeg",
+        "title": "Uygulama fotoğrafı 18"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/17.jpeg",
+        "title": "Uygulama fotoğrafı 17"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/16.jpeg",
+        "title": "Uygulama fotoğrafı 16"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/15.jpeg",
+        "title": "Uygulama fotoğrafı 15"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/14.jpeg",
+        "title": "Uygulama fotoğrafı 14"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/13.jpeg",
+        "title": "Uygulama fotoğrafı 13"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/12.jpeg",
+        "title": "Uygulama fotoğrafı 12"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/11.jpeg",
+        "title": "Uygulama fotoğrafı 11"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/10.jpeg",
+        "title": "Uygulama fotoğrafı 10"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/9.jpeg",
+        "title": "Uygulama fotoğrafı 09"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/8.jpeg",
+        "title": "Uygulama fotoğrafı 08"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/7.jpeg",
+        "title": "Uygulama fotoğrafı 07"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/6.jpeg",
+        "title": "Uygulama fotoğrafı 06"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/5.jpeg",
+        "title": "Uygulama fotoğrafı 05"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/4.jpeg",
+        "title": "Uygulama fotoğrafı 04"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/3.jpeg",
+        "title": "Uygulama fotoğrafı 03"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/2.jpeg",
+        "title": "Uygulama fotoğrafı 02"
+      },
+      {
+        "type": "image",
+        "src": "galeri/images/1.jpeg",
+        "title": "Uygulama fotoğrafı 01"
+      },
+      {
+        "type": "video",
+        "src": "galeri/videos/1.mp4",
+        "poster": "galeri/images/94.jpeg",
+        "title": "Uygulama videosu 01"
+      },
+      {
+        "type": "video",
+        "src": "galeri/videos/2.mp4",
+        "poster": "galeri/images/94.jpeg",
+        "title": "Uygulama videosu 02"
+      },
+      {
+        "type": "video",
+        "src": "galeri/videos/3.mp4",
+        "poster": "galeri/images/94.jpeg",
+        "title": "Uygulama videosu 03"
+      },
+      {
+        "type": "video",
+        "src": "galeri/videos/4.mp4",
+        "poster": "galeri/images/94.jpeg",
+        "title": "Uygulama videosu 04"
+      },
+      {
+        "type": "video",
+        "src": "galeri/videos/5.mp4",
+        "poster": "galeri/images/94.jpeg",
+        "title": "Uygulama videosu 05"
+      },
+      {
+        "type": "video",
+        "src": "galeri/videos/6.mp4",
+        "poster": "galeri/images/94.jpeg",
+        "title": "Uygulama videosu 06"
+      },
+      {
+        "type": "video",
+        "src": "galeri/videos/7.mp4",
+        "poster": "galeri/images/94.jpeg",
+        "title": "Uygulama videosu 07"
+      },
+      {
+        "type": "video",
+        "src": "galeri/videos/8.mp4",
+        "poster": "galeri/images/94.jpeg",
+        "title": "Uygulama videosu 08"
+      }
+    ]
+  },
+  "process": {
+    "eyebrow": "04 / NASIL ÇALIŞIYORUZ",
+    "title": "İlk görüşmeden\nson dokunuşa.",
+    "steps": [
+      {
+        "title": "Dinliyor, keşfediyoruz.",
+        "description": "İhtiyaçlarınızı yerinde değerlendiriyor, mekânınızın potansiyelini birlikte keşfediyoruz."
+      },
+      {
+        "title": "Planlıyor, netleştiriyoruz.",
+        "description": "Malzeme, uygulama ve iş takvimini belirliyor; projeniz için açık ve anlaşılır bir teklif hazırlıyoruz."
+      },
+      {
+        "title": "Özenle hayata geçiriyoruz.",
+        "description": "Deneyimli ekibimizle her detayı uyguluyor, son kontrollerin ardından mekânınızı teslim ediyoruz."
+      }
+    ]
+  },
+  "contact": {
+    "eyebrow": "BİRLİKTE İNŞA EDELİM",
+    "title": "Sizin mekânınız.\nSıradaki hikâyemiz.",
+    "cta": "Projenizi konuşalım",
+    "whatsappLabel": "WhatsApp’tan yazın",
+    "whatsapp": "https://wa.me/905308820849?text=Merhaba%2C%20projem%20i%C3%A7in%20bilgi%20almak%20istiyorum.",
+    "phone": "0530 882 08 49",
+    "phoneHref": "tel:+905308820849",
+    "address": "İstanbul, Türkiye",
+    "hours": "Pazartesi – Cumartesi · 08:00 – 18:00",
+    "closed": "Pazar · Kapalı",
+    "instagram": "https://www.instagram.com/galip_emirkulu/",
+    "socialLabel": "Instagram",
+    "copyright": "© 2026 GEKA Yapı. Tüm hakları saklıdır.",
+    "credit": {
+      "label": "Site tasarımı ve geliştirme",
+      "name": "Yusuf Yılmaz",
+      "website": "https://www.yusufyilmaz.tech/",
+      "phone": "+90 537 255 30 88",
+      "phoneHref": "tel:+905372553088",
+      "instagramLabel": "@chilliskevin",
+      "instagram": "https://www.instagram.com/chilliskevin/"
+    },
+    "top": "Başa dön"
+  },
+  "ui": {
+    "menu": "Menü",
+    "close": "Kapat",
+    "previous": "Önceki",
+    "next": "Sonraki",
+    "viewer": "Proje görüntüleyici",
+    "open": "Görüntüle",
+    "skip": "İçeriğe geç",
+    "pause": "Hareketi durdur",
+    "resume": "Hareketi başlat"
+  },
+  "privacy": {
+    "title": "Çerez tercihleri",
+    "description": "Ziyaretçi deneyimini geliştirmek için Google Analytics kullanımına izin veriyor musunuz?",
+    "accept": "Kabul et",
+    "decline": "Reddet",
+    "settings": "Çerez tercihleri"
+  }
+}
