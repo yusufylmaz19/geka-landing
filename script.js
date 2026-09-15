@@ -69,7 +69,7 @@ async function boot() {
     filtered = archive.filter(
       (p) => b.dataset.filter === "all" || p.type === b.dataset.filter,
     );
-    shown = 8;
+    shown = b.dataset.filter === "video" ? filtered.length : 8;
     renderArchive();
   };
   $("#more").onclick = () => {
@@ -88,6 +88,15 @@ async function boot() {
       media.controls = true;
       media.playsInline = true;
       media.preload = "metadata";
+      media.defaultMuted = true;
+      media.muted = true;
+      media.volume = 0;
+      const keepMuted = () => {
+        if (!media.muted) media.muted = true;
+        if (media.volume !== 0) media.volume = 0;
+      };
+      media.addEventListener("volumechange", keepMuted);
+      media.addEventListener("play", keepMuted);
     } else media.alt = p.title;
     $(".lightbox-media").append(media);
     $("#media-title").textContent = p.title;

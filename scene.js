@@ -1,4 +1,4 @@
-﻿import * as THREE from "./vendor/three.module.js";
+import * as THREE from "./vendor/three.module.js";
 
 // Illustrative portal-frame hall with I-sections, bolted connections and bracing.
 export function initScene(labels) {
@@ -8,6 +8,8 @@ export function initScene(labels) {
     dock = document.querySelector(".model-dock");
   const toggle = document.querySelector(".motion-toggle");
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
+  let motionOptIn = false;
+  const isReduced = () => motion.matches && !motionOptIn;
   const mobile = matchMedia("(max-width:700px)");
   const renderer = new THREE.WebGLRenderer({
     canvas,
@@ -182,7 +184,7 @@ export function initScene(labels) {
   };
   function render() {
     if (disposed) return;
-    const p = motion.matches ? 1 : 0.28 + progress * 0.72;
+    const p = isReduced() ? 1 : 0.08 + progress * 0.92;
     phases.forEach(({ g, start, end, offset }) => {
       const t = smooth((p - start) / (end - start));
       g.visible = t > 0;
@@ -199,7 +201,7 @@ export function initScene(labels) {
     const r = track.getBoundingClientRect();
     const travel = Math.max(1, track.offsetHeight - dock.offsetHeight);
     if (!paused) progress = THREE.MathUtils.clamp((12 - r.top) / travel, 0, 1);
-    if (motion.matches || paused) render();
+    if (isReduced() || paused) render();
   }
   function resize() {
     const w = stage.clientWidth,
@@ -223,7 +225,7 @@ export function initScene(labels) {
   }
   function loop() {
     renderer.setAnimationLoop(
-      visible && !document.hidden && !motion.matches && !paused ? tick : null,
+      visible && !document.hidden && !isReduced() && !paused ? tick : null,
     );
     render();
   }
@@ -239,7 +241,8 @@ export function initScene(labels) {
       pointer = (e.clientX / innerWidth - 0.5) * 0.1;
   };
   const onMotion = () => {
-    toggle.hidden = motion.matches;
+    toggle.hidden = false;
+    toggle.textContent = isReduced() ? labels.start : (paused ? labels.resume : labels.pause);
     resize();
     loop();
   };
@@ -247,8 +250,19 @@ export function initScene(labels) {
   addEventListener("pointermove", onPointer, { passive: true });
   document.addEventListener("visibilitychange", loop);
   motion.addEventListener("change", onMotion);
-  toggle.hidden = motion.matches;
+  toggle.hidden = false;
+    toggle.textContent = isReduced() ? labels.start : (paused ? labels.resume : labels.pause);
   toggle.onclick = () => {
+    if (isReduced()) {
+      motionOptIn = true;
+      hero.classList.add("motion-enabled");
+      paused = false;
+      toggle.textContent = labels.pause;
+      toggle.setAttribute("aria-pressed", "false");
+      resize();
+      loop();
+      return;
+    }
     paused = !paused;
     toggle.textContent = paused ? labels.resume : labels.pause;
     toggle.setAttribute("aria-pressed", String(paused));
@@ -270,7 +284,8 @@ export function initScene(labels) {
     hero.classList.remove("scene-failed");
     resize();
     stage.classList.add("ready");
-    toggle.hidden = motion.matches;
+    toggle.hidden = false;
+    toggle.textContent = isReduced() ? labels.start : (paused ? labels.resume : labels.pause);
     loop();
   });
   // Start with the first frame already partly assembled; finish before pin release.

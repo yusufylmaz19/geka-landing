@@ -1264,3 +1264,11 @@ dialog::backdrop {
     height: 420px;
   }
 }
+@media (prefers-reduced-motion: reduce) and (min-width: 701px) {
+  .hero.motion-enabled .hero-scroll { height: 200svh; min-height: 1250px; }
+  .hero.motion-enabled .hero-layout { position: sticky; top: 0; height: 100svh; min-height: 620px; }
+}
+@media (prefers-reduced-motion: reduce) and (max-width: 700px) {
+  .hero.motion-enabled .model-track { height: 160svh; min-height: 850px; }
+  .hero.motion-enabled .model-dock { position: sticky; top: 12px; height: 70svh; min-height: 340px; max-height: 600px; }
+}
